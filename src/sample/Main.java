@@ -3,6 +3,8 @@ package sample;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -28,7 +30,7 @@ public class Main extends Application {
     private Shape makeGrid() {
         int width = (columns+1) * tile_size;
         int height = (rows+1) * tile_size;
-        Shape shape = new Rectangle(columns, rows);
+        Shape shape = new Rectangle(width, height);
 
         for(int i=0 ; i<rows; i++) {
             for(int j=0 ; j<columns; j++) {
@@ -42,7 +44,16 @@ public class Main extends Application {
             }
         }
 
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(45.0);
+        light.setElevation(25.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(1.0);
+
         shape.setFill(Color.LIGHTBLUE);
+        shape.setEffect(lighting);
 
         return shape;
     }
