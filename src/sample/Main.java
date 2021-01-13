@@ -12,6 +12,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
 
     private static final int tile_size = 100;
@@ -23,6 +26,7 @@ public class Main extends Application {
 
         Shape gridShape = makeGrid();
         root.getChildren().add(gridShape);
+        root.getChildren().addAll(makeColumnsHighlighted());
 
         return  root;
     }
@@ -50,12 +54,29 @@ public class Main extends Application {
 
         Lighting lighting = new Lighting();
         lighting.setLight(light);
-        lighting.setSurfaceScale(1.0);
+        lighting.setSurfaceScale(5.0);
 
         shape.setFill(Color.LIGHTBLUE);
         shape.setEffect(lighting);
 
         return shape;
+    }
+
+    private List<Rectangle> makeColumnsHighlighted(){
+        List<Rectangle> rects = new ArrayList<>();
+
+        for (int i = 0; i < columns; i++) {
+            Rectangle rectangle = new Rectangle(tile_size, (rows+1) * tile_size);
+            rectangle.setTranslateX(i*(tile_size + 5) + (tile_size/4));
+            rectangle.setFill(Color.TRANSPARENT);
+
+            rectangle.setOnMouseEntered(e-> rectangle.setFill(Color.rgb(200, 200, 50, .3)));
+            rectangle.setOnMouseExited(e-> rectangle.setFill(Color.TRANSPARENT));
+
+            rects.add(rectangle);
+        }
+
+        return rects;
     }
 
     @Override
