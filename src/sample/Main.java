@@ -117,6 +117,7 @@ public class Main extends Application {
         turn.setCenterY(rows*tile_size / 2);
 
         left.getChildren().add(turn);
+
     }
 
     private boolean gameEnded(int column, int row) {
