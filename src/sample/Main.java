@@ -32,6 +32,7 @@ public class Main extends Application {
     private Disc[][] grid = new Disc[columns][rows];
 
     private Pane discRoot = new Pane();
+    Pane left = new Pane();
 
 
     private Shape makeGrid() {
@@ -101,7 +102,7 @@ public class Main extends Application {
 
         final int currentRow = row;
 
-        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5), disc);
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.3), disc);
         animation.setToY(row * (tile_size + 5) + tile_size / 4);
         animation.setOnFinished(e -> {
             if (gameEnded(column, currentRow)) {
@@ -111,6 +112,11 @@ public class Main extends Application {
             redMove = !redMove;
         });
         animation.play();
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+        left.getChildren().add(turn);
     }
 
     private boolean gameEnded(int column, int row) {
@@ -184,7 +190,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         GridPane root = new GridPane();
 
-        Pane left = new Pane();
         left.setPrefSize(2*tile_size, columns* tile_size);
         Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
         turn.setCenterX(tile_size);
