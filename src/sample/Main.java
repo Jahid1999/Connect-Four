@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -32,16 +33,6 @@ public class Main extends Application {
 
     private Pane discRoot = new Pane();
 
-    private Parent createContent() {
-        Pane root = new Pane();
-        root.getChildren().add(discRoot);
-
-        Shape gridShape = makeGrid();
-        root.getChildren().add(gridShape);
-        root.getChildren().addAll(makecolumns());
-
-        return root;
-    }
 
     private Shape makeGrid() {
         Shape board = new Rectangle((columns + 1) * tile_size, (rows + 1) * tile_size);
@@ -72,7 +63,7 @@ public class Main extends Application {
         return board;
     }
 
-    private List<Rectangle> makecolumns() {
+    private List<Rectangle> makeColumns() {
         List<Rectangle> list = new ArrayList<>();
 
         for (int i = 0; i < columns; i++) {
@@ -191,8 +182,30 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(createContent()));
+        GridPane root = new GridPane();
+
+        Pane left = new Pane();
+        left.setPrefSize(2*tile_size, columns* tile_size);
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+
+        left.getChildren().add(turn);
+
+        Pane right = new Pane();
+        right.getChildren().add(discRoot);
+
+        Shape gridShape = makeGrid();
+        right.getChildren().add(gridShape);
+        right.getChildren().addAll(makeColumns());
+
+        root.add(left,0,1);
+        root.add(right,1,1);
+
+
         primaryStage.setTitle("Connect Four");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
