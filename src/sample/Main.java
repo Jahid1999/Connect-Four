@@ -18,6 +18,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import minimaxPackage.Minimax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,6 +270,11 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        int [][] board = new int [6] [7];
+        Minimax minimax = new Minimax();
+        minimax.minimax(board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
+        System.out.println(minimax.getMove());
+        System.out.println("-------");
         launch(args);
     }
 }
