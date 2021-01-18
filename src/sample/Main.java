@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,38 +24,29 @@ import java.util.stream.IntStream;
 
 public class Main extends Application {
 
-    private static final int TILE_SIZE = 100;
-    private static final int COLUMNS = 7;
-    private static final int ROWS = 6;
+    private static final int tile_size = 100;
+    private static final int columns = 7;
+    private static final int rows = 6;
 
     private boolean redMove = true;
-    private Disc[][] grid = new Disc[COLUMNS][ROWS];
+    private Disc[][] grid = new Disc[columns][rows];
 
     private Pane discRoot = new Pane();
+    Pane left = new Pane();
 
-    private Parent createContent() {
-        Pane root = new Pane();
-        root.getChildren().add(discRoot);
-
-        Shape gridShape = makeGrid();
-        root.getChildren().add(gridShape);
-        root.getChildren().addAll(makeColumns());
-
-        return root;
-    }
 
     private Shape makeGrid() {
-        Shape shape = new Rectangle((COLUMNS + 1) * TILE_SIZE, (ROWS + 1) * TILE_SIZE);
+        Shape board = new Rectangle((columns + 1) * tile_size, (rows + 1) * tile_size);
 
-        for (int y = 0; y < ROWS; y++) {
-            for (int x = 0; x < COLUMNS; x++) {
-                Circle circle = new Circle(TILE_SIZE / 2);
-                circle.setCenterX(TILE_SIZE / 2);
-                circle.setCenterY(TILE_SIZE / 2);
-                circle.setTranslateX(x * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                circle.setTranslateY(y * (TILE_SIZE + 5) + TILE_SIZE / 4);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                Circle circle = new Circle(tile_size / 2);
+                circle.setCenterX(tile_size / 2);
+                circle.setCenterY(tile_size / 2);
+                circle.setTranslateX(j * (tile_size + 5) + tile_size / 4);
+                circle.setTranslateY(i * (tile_size + 5) + tile_size / 4);
 
-                shape = Shape.subtract(shape, circle);
+                board = Shape.subtract(board, circle);
             }
         }
 
@@ -66,24 +58,24 @@ public class Main extends Application {
         lighting.setLight(light);
         lighting.setSurfaceScale(5.0);
 
-        shape.setFill(Color.LIGHTBLUE);
-        shape.setEffect(lighting);
+        board.setFill(Color.LIGHTBLUE);
+        board.setEffect(lighting);
 
-        return shape;
+        return board;
     }
 
     private List<Rectangle> makeColumns() {
         List<Rectangle> list = new ArrayList<>();
 
-        for (int x = 0; x < COLUMNS; x++) {
-            Rectangle rect = new Rectangle(TILE_SIZE, (ROWS + 1) * TILE_SIZE);
-            rect.setTranslateX(x * (TILE_SIZE + 5) + TILE_SIZE / 4);
+        for (int i = 0; i < columns; i++) {
+            Rectangle rect = new Rectangle(tile_size, (rows + 1) * tile_size);
+            rect.setTranslateX(i * (tile_size + 5) + tile_size / 4);
             rect.setFill(Color.TRANSPARENT);
 
             rect.setOnMouseEntered(e -> rect.setFill(Color.rgb(200, 200, 50, 0.3)));
             rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
 
-            final int column = x;
+            final int column = i;
             rect.setOnMouseClicked(e -> placeDisc(new Disc(redMove), column));
 
             list.add(rect);
@@ -93,7 +85,7 @@ public class Main extends Application {
     }
 
     private void placeDisc(Disc disc, int column) {
-        int row = ROWS - 1;
+        int row = rows - 1;
         do {
             if (!getDisc(column, row).isPresent())
                 break;
@@ -106,12 +98,12 @@ public class Main extends Application {
 
         grid[column][row] = disc;
         discRoot.getChildren().add(disc);
-        disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
+        disc.setTranslateX(column * (tile_size + 5) + tile_size / 4);
 
         final int currentRow = row;
 
-        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5), disc);
-        animation.setToY(row * (TILE_SIZE + 5) + TILE_SIZE / 4);
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.3), disc);
+        animation.setToY(row * (tile_size + 5) + tile_size / 4);
         animation.setOnFinished(e -> {
             if (gameEnded(column, currentRow)) {
                 gameOver();
@@ -120,6 +112,11 @@ public class Main extends Application {
             redMove = !redMove;
         });
         animation.play();
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+        left.getChildren().add(turn);
     }
 
     private boolean gameEnded(int column, int row) {
@@ -171,8 +168,8 @@ public class Main extends Application {
     }
 
     private Optional<Disc> getDisc(int column, int row) {
-        if (column < 0 || column >= COLUMNS
-                || row < 0 || row >= ROWS)
+        if (column < 0 || column >= columns
+                || row < 0 || row >= rows)
             return Optional.empty();
 
         return Optional.ofNullable(grid[column][row]);
@@ -181,19 +178,40 @@ public class Main extends Application {
     private static class Disc extends Circle {
         private final boolean red;
         public Disc(boolean red) {
-            super(TILE_SIZE / 2, red ? Color.RED : Color.YELLOW);
+            super(tile_size / 2, red ? Color.RED : Color.YELLOW);
             this.red = red;
 
-            setCenterX(TILE_SIZE / 2);
-            setCenterY(TILE_SIZE / 2);
+            setCenterX(tile_size / 2);
+            setCenterY(tile_size / 2);
         }
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(createContent()));
-        stage.setTitle("Connect Four");
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+        GridPane root = new GridPane();
+
+        left.setPrefSize(2*tile_size, columns* tile_size);
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+
+        left.getChildren().add(turn);
+
+        Pane right = new Pane();
+        right.getChildren().add(discRoot);
+
+        Shape gridShape = makeGrid();
+        right.getChildren().add(gridShape);
+        right.getChildren().addAll(makeColumns());
+
+        root.add(left,0,1);
+        root.add(right,1,1);
+
+
+        primaryStage.setTitle("Connect Four");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
