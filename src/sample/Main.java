@@ -31,10 +31,13 @@ public class Main extends Application {
     private static final int tile_size = 100;
     private static final int columns = 7;
     private static final int rows = 6;
+    int human =1;
+    int ai=2;
 
     private boolean redMove = true;
     private boolean isGameEnded = false;
     private Disc[][] grid = new Disc[columns][rows];
+    public int[][] board = new int [rows][columns];
 
     private Pane discRoot = new Pane();
     Pane left = new Pane();
@@ -102,6 +105,11 @@ public class Main extends Application {
             return;
 
         grid[column][row] = disc;
+        if(redMove)
+        {
+            board[row][column] = human;
+        }
+
         discRoot.getChildren().add(disc);
         disc.setTranslateX(column * (tile_size + 5) + tile_size / 4);
 
@@ -131,6 +139,16 @@ public class Main extends Application {
 
             left.getChildren().add(turn);
             left.getChildren().add(turnText);
+        }
+        if(!redMove)
+        {
+            Minimax minimax = new Minimax();
+            minimax.minimax(board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
+            int col = minimax.getMove();
+
+            placeDisc(new Disc(redMove), col);
+            int rowAi = minimax.calculateRow(board, col );
+            board[rowAi][col] = ai;
         }
     }
 
@@ -270,11 +288,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        int [][] board = new int [6] [7];
-        Minimax minimax = new Minimax();
-        minimax.minimax(board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
-        System.out.println(minimax.getMove());
-        System.out.println("-------");
+
         launch(args);
     }
 }
