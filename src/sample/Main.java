@@ -5,14 +5,17 @@ import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -116,7 +119,14 @@ public class Main extends Application {
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
+        Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
         left.getChildren().add(turn);
+        left.getChildren().add(turnText);
     }
 
     private boolean gameEnded(int column, int row) {
@@ -195,8 +205,25 @@ public class Main extends Application {
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
+        VBox vbox = new VBox();
+        vbox.setFillWidth(true);
 
+        Button btn = new Button("Connect Four");
+        btn.setFont(new Font(22));
+        btn.setStyle("-fx-background-color: #ab7cbf");
+        btn.setMinWidth(2*tile_size);
+        vbox.getChildren().add(btn);
+
+        Button turnText = new Button("Your Turn");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+
+        left.getChildren().add(vbox);
         left.getChildren().add(turn);
+        left.getChildren().add(turnText);
 
         Pane right = new Pane();
         right.getChildren().add(discRoot);
