@@ -1,10 +1,31 @@
-package minimaxPackage;
+package abcd;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Minimax
 {
+    private int [][] board = new int[6][7];
+
+    public Minimax(int[][] board) {
+        for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<7; j++)
+            {
+                this.board[i][j] = board[i][j];
+            }
+        }
+        minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
+        /*for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<7; j++)
+            {
+                System.out.print(board[i][j]+"-------");
+            }
+            System.out.println();
+        }*/
+    }
+
     private int rows = 6;
     private int columns = 7;
 
@@ -21,9 +42,13 @@ public class Minimax
     {
         for(int i=0; i<columns; i++)
         {
-            if(board[rows-1][i]==0)
+            for (int j=0; j<rows; j++)
             {
-                validCols.add(i);
+                if (board[j][i]==0)
+                {
+                    validCols.add(i);
+                    break;
+                }
             }
         }
     }
@@ -45,15 +70,18 @@ public class Minimax
     {
         if (depth==0)
         {
+            //System.out.println("ami asi");
             return 0;
         }
 
         if (win(board, ai))
         {
+            //System.out.println("jitse");
             return 1;
         }
-        else if (win(board,human))
+        if (win(board,human))
         {
+            //System.out.println("jitse");
             return -1;
         }
 
@@ -61,13 +89,23 @@ public class Minimax
 
         calculateValidCols(board, validCols);
 
+        //System.out.println("---"+validCols+"---");
+
         if (turn == 1)
         {
             move = validCols.get(0);
 
             for(int col: validCols)
             {
-                int [][] tempBoard = board.clone();
+                int [][] tempBoard = new int [6][7]; // = board.clone();
+
+                for(int i=0; i<6; i++)
+                {
+                    for(int j=0; j<7; j++)
+                    {
+                        tempBoard[i][j] = board[i][j];
+                    }
+                }
 
                 int row = calculateRow(tempBoard, col);
 
@@ -79,6 +117,7 @@ public class Minimax
                 {
                     a = value;
                     move = col;
+                    //System.out.println("----------" + move);
                 }
 
                 if (a>=b)
@@ -92,7 +131,15 @@ public class Minimax
         {
             for(int col: validCols)
             {
-                int [][] tempBoard = board.clone();
+                int [][] tempBoard = new int [6][7]; // = board.clone();
+
+                for(int i=0; i<6; i++)
+                {
+                    for(int j=0; j<7; j++)
+                    {
+                        tempBoard[i][j] = board[i][j];
+                    }
+                }
 
                 int row = calculateRow(tempBoard, col);
 
@@ -120,7 +167,7 @@ public class Minimax
         {
             for(int j=0; j<4; j++)
             {
-                if(board[i][j]==player&&board[i+1][j+1]==0&&board[i+2][j+2]==0&&board[i+3][j+3]==0)
+                if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player&&board[i+3][j+3]==player)
                 {
                     return true;
                 }
@@ -131,7 +178,7 @@ public class Minimax
         {
             for(int j=0; j<4; j++)
             {
-                if(board[i][j]==player&&board[i-1][j+1]==0&&board[i-2][j+2]==0&&board[i-3][j+3]==0)
+                if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player&&board[i-3][j+3]==player)
                 {
                     return true;
                 }
@@ -142,7 +189,7 @@ public class Minimax
         {
             for(int j=0; j<4; j++)
             {
-                if(board[i][j]==player&&board[i][j+1]==0&&board[i][j+2]==0&&board[i][j+3]==0)
+                if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player&&board[i][j+3]==player)
                 {
                     return true;
                 }
@@ -153,7 +200,7 @@ public class Minimax
         {
             for(int j=0; j<7; j++)
             {
-                if(board[i][j]==player&&board[i+1][j]==0&&board[i+2][j]==0&&board[i+3][j]==0)
+                if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player&&board[i+3][j]==player)
                 {
                     return true;
                 }

@@ -1,21 +1,29 @@
 package sample;
 
+import abcd.Minimax;
+import javafx.animation.FillTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import minimaxPackage.Minimax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +36,13 @@ public class Main extends Application {
     private static final int tile_size = 100;
     private static final int columns = 7;
     private static final int rows = 6;
+    int human =1;
+    int ai=2;
 
     private boolean redMove = true;
+    private boolean isGameEnded = false;
     private Disc[][] grid = new Disc[columns][rows];
+    public int[][] board = new int [rows][columns];
 
     private Pane discRoot = new Pane();
     Pane left = new Pane();
@@ -85,42 +97,224 @@ public class Main extends Application {
         return list;
     }
 
-    private void placeDisc(Disc disc, int column) {
+    public boolean winning (int [][] board, int player)
+    {
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player&&board[i+3][j+3]==player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=3; i<6; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player&&board[i-3][j+3]==player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player&&board[i][j+3]==player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<7; j++)
+            {
+                if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player&&board[i+3][j]==player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int calUIRow (int col)
+    {
         int row = rows - 1;
         do {
-            if (!getDisc(column, row).isPresent())
+            if (!getDisc(col, row).isPresent())
                 break;
 
             row--;
         } while (row >= 0);
 
         if (row < 0)
-            return;
+            return -1;
 
-        grid[column][row] = disc;
+        return row;
+    }
+
+    public boolean isValidCol (int col)
+    {
+        for (int i=0; i<rows; i++)
+        {
+            if(board[i][col]==0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void checkWin ()
+    {
+        if(winning(board, human))
+        {
+            gameOver();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Congratulations! You have won!");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
+            {
+                System.exit(0);
+            }
+        }
+        if(winning(board, ai))
+        {
+            gameOver();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "OOPS! You have lost!");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
+            {
+                System.exit(0);
+            }
+        }
+    }
+
+    TranslateTransition a1;
+    TranslateTransition a2;
+
+    private void placeDisc(Disc disc, int column) {
+
+        int row = calUIRow(column);
+
+        if(redMove)
+        {
+            grid[column][row] = disc;
+            board[5-row][column] = human;
+            //System.out.println("-------------" + row);
+        }
+
         discRoot.getChildren().add(disc);
         disc.setTranslateX(column * (tile_size + 5) + tile_size / 4);
 
         final int currentRow = row;
-
-        TranslateTransition animation = new TranslateTransition(Duration.seconds(0.3), disc);
-        animation.setToY(row * (tile_size + 5) + tile_size / 4);
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), disc);
+        animation.setToY((row * (tile_size + 5) + tile_size / 4)+1.5*tile_size);
         animation.setOnFinished(e -> {
-            if (gameEnded(column, currentRow)) {
-                gameOver();
+
+        });
+
+        if (redMove)
+        {
+            a1 = animation;
+            a2 = new TranslateTransition(Duration.seconds(0));
+        }
+        else
+        {
+            a2 =animation;
+        }
+
+        //animation.play();
+
+        SequentialTransition st = new SequentialTransition(disc, a1, new PauseTransition(Duration.seconds(1)), a2);
+
+        st.play();
+
+        checkWin();
+
+        if(!isGameEnded)
+        {
+            Circle turn;
+            Button turnText;
+
+
+            System.out.println("99");
+            FillTransition ft = new FillTransition(Duration.seconds(1), new Circle(100, 100,tile_size/2), Color.RED, Color.YELLOW);
+            ft.play();
+
+            System.out.println("00");
+            if (redMove)
+            {
+                /*turn = new Circle(tile_size / 2, Color.RED);
+                turnText = new Button("Your Turn");
+                turn.setCenterX(tile_size);
+                turn.setCenterY(rows*tile_size / 2);
+                turnText.setFont(new Font(22));
+                turnText.setStyle("-fx-background-color: #ffffff");
+                turnText.setMinWidth(2*tile_size);
+                turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+                left.getChildren().add(turn);
+                left.getChildren().add(turnText);*/
+            }
+            else
+            {
+                /*turn = new Circle(tile_size / 2, Color.YELLOW);
+                turnText = new Button("AI's Turn");
+                turn.setCenterX(tile_size);
+                turn.setCenterY(rows*tile_size / 2);
+                turnText.setFont(new Font(22));
+                turnText.setStyle("-fx-background-color: #ffffff");
+                turnText.setMinWidth(2*tile_size);
+                turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+                left.getChildren().add(turn);
+                left.getChildren().add(turnText);*/
             }
 
-            redMove = !redMove;
-        });
-        animation.play();
-        Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
-        turn.setCenterX(tile_size);
-        turn.setCenterY(rows*tile_size / 2);
+            //Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+            //Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
+        }
+        redMove = !redMove;
+        // have to add one second latency
+        if(!redMove)
+        {
+            /*try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }*/
 
-        left.getChildren().add(turn);
+            Minimax minimax = new Minimax(board);
+            int col = minimax.getMove();
+
+            int rowAI = minimax.calculateRow(board, col);
+            int rowUI = calUIRow(col);
+            /*System.out.println("row---" + rowAI);
+            System.out.println("col---" + col);*/
+            placeDisc(new Disc(redMove), col);
+
+            //System.out.println("col----" + col);
+
+            grid[col][rowUI] = disc;
+            board[rowAI][col] = ai;
+
+            checkWin();
+        }
     }
 
-    private boolean gameEnded(int column, int row) {
+
+
+    /*private boolean gameEnded(int column, int row) {
         List<Point2D> vertical = IntStream.rangeClosed(row - 3, row + 3)
                 .mapToObj(r -> new Point2D(column, r))
                 .collect(Collectors.toList());
@@ -141,7 +335,7 @@ public class Main extends Application {
 
         return checkRange(vertical) || checkRange(horizontal)
                 || checkRange(diagonal1) || checkRange(diagonal2);
-    }
+    }*/
 
     private boolean checkRange(List<Point2D> points) {
         int chain = 0;
@@ -165,7 +359,30 @@ public class Main extends Application {
     }
 
     private void gameOver() {
-        System.out.println("Winner: " + (redMove ? "RED" : "YELLOW"));
+        isGameEnded = true;
+        Pane ended = new Pane();
+        ended.setPrefSize(2*tile_size, 4* tile_size);
+        ended.setLayoutY((rows-2)*tile_size / 2);
+
+        Button winner = new Button("<Winner>");
+        winner.setFont(new Font(22));
+        winner.setStyle("-fx-background-color: #b09d21");
+        winner.setMinWidth(2*tile_size);
+        winner.setLayoutY((rows-2)*tile_size / 2);
+
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+        Button turnText = new Button(redMove? "You" : "AI");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+        left.getChildren().add(winner);
+        left.getChildren().add(turn);
+        left.getChildren().add(turnText);
     }
 
     private Optional<Disc> getDisc(int column, int row) {
@@ -183,7 +400,7 @@ public class Main extends Application {
             this.red = red;
 
             setCenterX(tile_size / 2);
-            setCenterY(tile_size / 2);
+            setCenterY(-tile_size);
         }
     }
 
@@ -196,8 +413,25 @@ public class Main extends Application {
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
+        VBox vbox = new VBox();
+        vbox.setFillWidth(true);
 
+        Button btn = new Button("Connect Four");
+        btn.setFont(new Font(22));
+        btn.setStyle("-fx-background-color: #ab7cbf");
+        btn.setMinWidth(2*tile_size);
+        vbox.getChildren().add(btn);
+
+        Button turnText = new Button("Your Turn");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+
+        left.getChildren().add(vbox);
         left.getChildren().add(turn);
+        left.getChildren().add(turnText);
 
         Pane right = new Pane();
         right.getChildren().add(discRoot);
@@ -216,11 +450,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        int [][] board = new int [6] [7];
-        Minimax minimax = new Minimax();
-        minimax.minimax(board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
-        System.out.println(minimax.getMove());
-        System.out.println("-------");
-        //launch(args);
+
+        launch(args);
     }
 }
