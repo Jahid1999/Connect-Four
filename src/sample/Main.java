@@ -5,14 +5,17 @@ import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -29,6 +32,7 @@ public class Main extends Application {
     private static final int rows = 6;
 
     private boolean redMove = true;
+    private boolean isGameEnded = false;
     private Disc[][] grid = new Disc[columns][rows];
 
     private Pane discRoot = new Pane();
@@ -112,11 +116,21 @@ public class Main extends Application {
             redMove = !redMove;
         });
         animation.play();
-        Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
-        turn.setCenterX(tile_size);
-        turn.setCenterY(rows*tile_size / 2);
+        if(!isGameEnded)
+        {
+            Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
+            turn.setCenterX(tile_size);
+            turn.setCenterY(rows*tile_size / 2);
 
-        left.getChildren().add(turn);
+            Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
+            turnText.setFont(new Font(22));
+            turnText.setStyle("-fx-background-color: #ffffff");
+            turnText.setMinWidth(2*tile_size);
+            turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+            left.getChildren().add(turn);
+            left.getChildren().add(turnText);
+        }
     }
 
     private boolean gameEnded(int column, int row) {
@@ -164,7 +178,30 @@ public class Main extends Application {
     }
 
     private void gameOver() {
-        System.out.println("Winner: " + (redMove ? "RED" : "YELLOW"));
+        isGameEnded = true;
+        Pane ended = new Pane();
+        ended.setPrefSize(2*tile_size, 4* tile_size);
+        ended.setLayoutY((rows-2)*tile_size / 2);
+
+        Button winner = new Button("<Winner>");
+        winner.setFont(new Font(22));
+        winner.setStyle("-fx-background-color: #b09d21");
+        winner.setMinWidth(2*tile_size);
+        winner.setLayoutY((rows-2)*tile_size / 2);
+
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+        Button turnText = new Button(redMove? "You" : "AI");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+        left.getChildren().add(winner);
+        left.getChildren().add(turn);
+        left.getChildren().add(turnText);
     }
 
     private Optional<Disc> getDisc(int column, int row) {
@@ -195,8 +232,25 @@ public class Main extends Application {
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
+        VBox vbox = new VBox();
+        vbox.setFillWidth(true);
 
+        Button btn = new Button("Connect Four");
+        btn.setFont(new Font(22));
+        btn.setStyle("-fx-background-color: #ab7cbf");
+        btn.setMinWidth(2*tile_size);
+        vbox.getChildren().add(btn);
+
+        Button turnText = new Button("Your Turn");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+
+        left.getChildren().add(vbox);
         left.getChildren().add(turn);
+        left.getChildren().add(turnText);
 
         Pane right = new Pane();
         right.getChildren().add(discRoot);
