@@ -32,6 +32,7 @@ public class Main extends Application {
     private static final int rows = 6;
 
     private boolean redMove = true;
+    private boolean isGameEnded = false;
     private Disc[][] grid = new Disc[columns][rows];
 
     private Pane discRoot = new Pane();
@@ -115,18 +116,21 @@ public class Main extends Application {
             redMove = !redMove;
         });
         animation.play();
-        Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
-        turn.setCenterX(tile_size);
-        turn.setCenterY(rows*tile_size / 2);
+        if(!isGameEnded)
+        {
+            Circle turn = new Circle(tile_size / 2, redMove ? Color.YELLOW : Color.RED);
+            turn.setCenterX(tile_size);
+            turn.setCenterY(rows*tile_size / 2);
 
-        Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
-        turnText.setFont(new Font(22));
-        turnText.setStyle("-fx-background-color: #ffffff");
-        turnText.setMinWidth(2*tile_size);
-        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+            Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
+            turnText.setFont(new Font(22));
+            turnText.setStyle("-fx-background-color: #ffffff");
+            turnText.setMinWidth(2*tile_size);
+            turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
 
-        left.getChildren().add(turn);
-        left.getChildren().add(turnText);
+            left.getChildren().add(turn);
+            left.getChildren().add(turnText);
+        }
     }
 
     private boolean gameEnded(int column, int row) {
@@ -174,7 +178,30 @@ public class Main extends Application {
     }
 
     private void gameOver() {
-        System.out.println("Winner: " + (redMove ? "RED" : "YELLOW"));
+        isGameEnded = true;
+        Pane ended = new Pane();
+        ended.setPrefSize(2*tile_size, 4* tile_size);
+        ended.setLayoutY((rows-2)*tile_size / 2);
+
+        Button winner = new Button("<Winner>");
+        winner.setFont(new Font(22));
+        winner.setStyle("-fx-background-color: #b09d21");
+        winner.setMinWidth(2*tile_size);
+        winner.setLayoutY((rows-2)*tile_size / 2);
+
+        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        turn.setCenterX(tile_size);
+        turn.setCenterY(rows*tile_size / 2);
+
+        Button turnText = new Button(redMove? "You" : "AI");
+        turnText.setFont(new Font(22));
+        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setMinWidth(2*tile_size);
+        turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+        left.getChildren().add(winner);
+        left.getChildren().add(turn);
+        left.getChildren().add(turnText);
     }
 
     private Optional<Disc> getDisc(int column, int row) {
