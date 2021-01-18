@@ -5,16 +5,20 @@ import java.util.List;
 
 public class Minimax
 {
-    private int [][] board = new int [6] [7];
-
     private int rows = 6;
     private int columns = 7;
 
-    private List<Integer> validCols = new ArrayList<>();
+    private int human = 1;
+    private int ai = 2;
 
-    public void calculateValidCols (int [][] board)
+    private int move;
+
+    public int getMove() {
+        return move;
+    }
+
+    public void calculateValidCols (int [][] board, List<Integer> validCols)
     {
-        validCols.clear();
         for(int i=0; i<columns; i++)
         {
             if(board[rows-1][i]==0)
@@ -37,40 +41,125 @@ public class Minimax
         return -1;
     }
 
-    public void minimax (int [][] board, int a, int b, int turn, int depth)
+    public int minimax (int [][] board, int a, int b, int turn, int depth)
     {
-        calculateValidCols(board);
-
-        if (turn == 0)
+        if (depth==0)
         {
-            /*choose = random.choice(validPositions)
-            tempBeta = negInf
+            return 0;
+        }
 
-            for col in validPositions:
-        tempBoard = board.copy()
-            row = checkForFreeRow(board, col)
+        if (win(board, ai))
+        {
+            return 1;
+        }
+        else if (win(board,human))
+        {
+            return -1;
+        }
 
-            putPiece(tempBoard, row, col, player_2)
+        List<Integer> validCols = new ArrayList<>();
 
-            newValue = minimax(tempBoard, depth-1, alpha, beta, False)[1]
+        calculateValidCols(board, validCols);
 
-            if newValue > tempBeta:
-            tempBeta = newValue
-            choose = col
+        if (turn == 1)
+        {
+            move = validCols.get(0);
 
-            if alpha>tempBeta:
-            tempBeta=alpha
-			else:
-            alpha=alpha
-            print(alpha)
-            if alpha >= beta:
-            print("pruning done- 1")
-            break
-            return choose, tempBeta*/
+            for(int col: validCols)
+            {
+                int [][] tempBoard = board.clone();
+
+                int row = calculateRow(tempBoard, col);
+
+                tempBoard[row][col] = ai;
+
+                int value = minimax(tempBoard, a, b, 0, depth-1);
+
+                if (value>a)
+                {
+                    a = value;
+                    move = col;
+                }
+
+                if (a>=b)
+                {
+                    break;
+                }
+            }
+            return a;
         }
         else
         {
+            for(int col: validCols)
+            {
+                int [][] tempBoard = board.clone();
 
+                int row = calculateRow(tempBoard, col);
+
+                tempBoard[row][col] = human;
+
+                int value = minimax(tempBoard, a, b, 1, depth-1);
+
+                if (value<b)
+                {
+                    b = value;
+                }
+
+                if (a>=b)
+                {
+                    break;
+                }
+            }
+            return b;
         }
+    }
+
+    public boolean win (int [][] board, int player)
+    {
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i+1][j+1]==0&&board[i+2][j+2]==0&&board[i+3][j+3]==0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=3; i<6; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i-1][j+1]==0&&board[i-2][j+2]==0&&board[i-3][j+3]==0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                if(board[i][j]==player&&board[i][j+1]==0&&board[i][j+2]==0&&board[i][j+3]==0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<7; j++)
+            {
+                if(board[i][j]==player&&board[i+1][j]==0&&board[i+2][j]==0&&board[i+3][j]==0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
