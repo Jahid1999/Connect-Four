@@ -1,10 +1,7 @@
 package sample;
 
 import abcd.Minimax;
-import javafx.animation.FillTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -179,7 +176,7 @@ public class Main extends Application {
     {
         if(winning(board, human))
         {
-            gameOver();
+            gameOver(human);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Congratulations! You have won!");
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -190,7 +187,7 @@ public class Main extends Application {
         }
         if(winning(board, ai))
         {
-            gameOver();
+            gameOver(ai);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "OOPS! You have lost!");
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -245,54 +242,30 @@ public class Main extends Application {
 
         if(!isGameEnded)
         {
-            Circle turn;
-            Button turnText;
+            Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, Color.YELLOW);
+            FadeTransition t = new FadeTransition(Duration.seconds(5), turn);
+            t.setFromValue(10);
+            t.setToValue(0);
+            t.play();
+            left.getChildren().add(turn);
 
-
-            System.out.println("99");
-            FillTransition ft = new FillTransition(Duration.seconds(1), new Circle(100, 100,tile_size/2), Color.RED, Color.YELLOW);
-            ft.play();
-
-            System.out.println("00");
-            if (redMove)
-            {
-                /*turn = new Circle(tile_size / 2, Color.RED);
-                turnText = new Button("Your Turn");
-                turn.setCenterX(tile_size);
-                turn.setCenterY(rows*tile_size / 2);
-                turnText.setFont(new Font(22));
-                turnText.setStyle("-fx-background-color: #ffffff");
-                turnText.setMinWidth(2*tile_size);
-                turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
-                left.getChildren().add(turn);
-                left.getChildren().add(turnText);*/
-            }
-            else
-            {
-                /*turn = new Circle(tile_size / 2, Color.YELLOW);
-                turnText = new Button("AI's Turn");
-                turn.setCenterX(tile_size);
-                turn.setCenterY(rows*tile_size / 2);
-                turnText.setFont(new Font(22));
-                turnText.setStyle("-fx-background-color: #ffffff");
-                turnText.setMinWidth(2*tile_size);
-                turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
-                left.getChildren().add(turn);
-                left.getChildren().add(turnText);*/
-            }
+            Button turnText = new Button("AI's Turn");
+            turnText.setFont(new Font(22));
+            turnText.setStyle("-fx-background-color: #ffffff");
+            turnText.setMinWidth(2*tile_size);
+            turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
+            FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
+            fade.setFromValue(10);
+            fade.setToValue(0);
+            fade.play();
+            left.getChildren().add(turnText);
 
             //Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
             //Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
         }
         redMove = !redMove;
-        // have to add one second latency
         if(!redMove)
         {
-            /*try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }*/
 
             Minimax minimax = new Minimax(board);
             int col = minimax.getMove();
@@ -358,7 +331,7 @@ public class Main extends Application {
         return false;
     }
 
-    private void gameOver() {
+    private void gameOver(int player) {
         isGameEnded = true;
         Pane ended = new Pane();
         ended.setPrefSize(2*tile_size, 4* tile_size);
@@ -370,11 +343,22 @@ public class Main extends Application {
         winner.setMinWidth(2*tile_size);
         winner.setLayoutY((rows-2)*tile_size / 2);
 
-        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        Circle turn = null;
+        Button turnText = null;
+        if (player==1)
+        {
+            turn = new Circle(tile_size / 2, Color.RED);
+            turnText = new Button("You");
+        }
+        else if (player==2)
+        {
+            turn = new Circle(tile_size / 2, Color.YELLOW);
+            turnText = new Button("AI");
+        }
+
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
-        Button turnText = new Button(redMove? "You" : "AI");
         turnText.setFont(new Font(22));
         turnText.setStyle("-fx-background-color: #ffffff");
         turnText.setMinWidth(2*tile_size);
@@ -383,6 +367,15 @@ public class Main extends Application {
         left.getChildren().add(winner);
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
+
+        for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<7; j++)
+            {
+                System.out.print(board[i][j]+"-------");
+            }
+            System.out.println();
+        }
     }
 
     private Optional<Disc> getDisc(int column, int row) {
