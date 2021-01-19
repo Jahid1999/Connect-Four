@@ -18,23 +18,39 @@ public class Main {
             }
             System.out.println();
         }
+        while(true) {
+            System.out.println("enter row number:");
+            System.out.println("enter col number:");
+            r = -(s.nextInt() - 6);
+            c = s.nextInt() - 1;
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    if (i == r && j == c) {
+                        board[i][j] = 1;
+                    }
 
-        System.out.println("enter row number:");
-        System.out.println("enter col number:");
-        r= -(s.nextInt()-6);
-        c = s.nextInt()-1;
-        for (int i=0;i<6;i++){
-            for(int j=0;j<7;j++){
-               if(i==r && j==c)
-               {board[i][j]=1;}
-
-                System.out.print(board[i][j]+"   ");
+                    System.out.print(board[i][j] + "   ");
+                }
+                System.out.println();
             }
-            System.out.println();
+
+            maxAlgo m = new maxAlgo(board);
+            int aiC = m.getMove();
+            System.out.println(aiC);
+
+            int aiR = -(m.calculateRow(board, aiC) - 5);
+            System.out.println(aiR);
+            board[aiR][aiC] = 10;
+            System.out.println(board[aiR][aiC]);
+
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+
+                    System.out.print(board[i][j] + "   ");
+                }
+                System.out.println();
+            }
+
         }
-
-        Minimax m = new Minimax(board,r,c);
-        m.putValue(player);
-
     }
 }
