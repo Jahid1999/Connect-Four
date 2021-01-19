@@ -1,10 +1,9 @@
 package sample;
 
-import abcd.Minimax;
+import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -25,8 +24,6 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main extends Application {
 

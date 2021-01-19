@@ -1,4 +1,4 @@
-package abcd;
+package miniMaxPackage;
 
 import java.util.ArrayList;
 import java.util.List;
