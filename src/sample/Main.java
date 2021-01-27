@@ -31,7 +31,7 @@ public class Main extends Application {
     private static final int columns = 7;
     private static final int rows = 6;
     int human =1;
-    int ai=2;
+    int ai =5;//2;
 
     private boolean redMove = true;
     private boolean isGameEnded = false;
@@ -342,12 +342,12 @@ public class Main extends Application {
 
         Circle turn = null;
         Button turnText = null;
-        if (player==1)
+        if (player==human)
         {
             turn = new Circle(tile_size / 2, Color.RED);
             turnText = new Button("You");
         }
-        else if (player==2)
+        else if (player==ai)
         {
             turn = new Circle(tile_size / 2, Color.YELLOW);
             turnText = new Button("AI");
