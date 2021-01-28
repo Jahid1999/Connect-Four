@@ -8,7 +8,7 @@ public class Minimax
 {
     private int [][] board = new int[6][7];
 
-    String indent = "";
+
 
     public Minimax(int[][] board) {
         for(int i=0; i<6; i++)
@@ -177,20 +177,17 @@ public class Minimax
 
                 tempBoard[row][col] = ai;
 
-                indent = indent + "****";
-                //System.out.println(indent);
                 int value = minimax(tempBoard, a, b, 0, depth-1);
-                //System.out.println(indent.substring(0,indent.length()-4));
 
                 list.add(value);
                 if (value>a)
                 {
                     a = value;
                     move = col;
-                    //System.out.println("+++++" + a + "+++++" + move);
+                    System.out.println("+++++" + a + "+++++" + move);
                 }
 
-                //System.out.println("++" + a + "++" + move);
+                System.out.println("++" + a + "++" + move);
 
                 if (a>=b)
                 {
@@ -201,11 +198,12 @@ public class Minimax
                 {
                     System.out.print("**" + kute);
                 }*/
+                System.out.println("****************************");
             }
             System.out.println(list);
-            /*System.out.println(validCols);
+            System.out.println(validCols);
             System.out.println(a);
-            System.out.println(move);*/
+            System.out.println(move);
             return a;
         }
         else
