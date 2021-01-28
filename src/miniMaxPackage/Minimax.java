@@ -8,7 +8,7 @@ public class Minimax
 {
     private int [][] board = new int[6][7];
 
-
+    int highestDepth = 5;
 
     public Minimax(int[][] board) {
         for(int i=0; i<6; i++)
@@ -38,7 +38,7 @@ public class Minimax
             tempMove = connect3(board, human);
             if (tempMove==-1)
             {*/
-                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
+                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, highestDepth);
             /*}
             else
             {
@@ -189,16 +189,21 @@ public class Minimax
                 {
                     //System.out.println(value);
                     a = value;
-                    move = col;
+
+                    if (depth==highestDepth)
+                    {
+                        move = col;
+                    }
+
                     //System.out.println("+++++" + a + "+++++" + move);
                 }
 
                 if (depth==5)
                 {
-                    System.out.println(col);
+                    /*System.out.println(col);
                     System.out.println(value);
                     System.out.println(move);
-                    System.out.println("****");
+                    System.out.println("****");*/
                 }
 
 
@@ -216,9 +221,9 @@ public class Minimax
                 }*/
                 //System.out.println("****************************");
             }
-            /*System.out.println(list);
+            System.out.println(list);
             System.out.println(validCols);
-            System.out.println(a);
+            /*System.out.println(a);
             System.out.println(move);*/
             return a;
         }
