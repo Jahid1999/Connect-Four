@@ -19,6 +19,15 @@ public class Minimax
             }
         }
 
+        /*List<Integer> validCols = new ArrayList<>();
+
+        calculateValidCols(board, validCols);
+        Random rand = new Random();
+        int randInt = rand.nextInt(validCols.size());
+        move = validCols.get(randInt);
+
+        System.out.println(move);*/
+
         /*int tempMove = connect3(board, ai);
         if (tempMove!=-1)
         {
@@ -52,7 +61,7 @@ public class Minimax
     private int human = 1;
     private int ai = 5;//2;
 
-    private int move;
+    private int move=-1;
 
     public int getMove() {
         return move;
@@ -134,7 +143,7 @@ public class Minimax
             //System.out.println("ami bolod");
             //System.out.println("ami asi");
             EvaluationFunction eval = new EvaluationFunction();
-            return 0;//eval.getValue(board, ai);
+            return eval.getValue(board, ai);
         }
 
         List<Integer> validCols = new ArrayList<>();
@@ -145,14 +154,11 @@ public class Minimax
 
         if (turn == 1)
         {
-            Random rand = new Random();
-            int randInt = rand.nextInt(validCols.size());
-            move = validCols.get(randInt);
-
             //System.out.println(validCols.size());
+            List<Integer> list = new ArrayList<>();
             for(int col: validCols)
             {
-                List<Integer> list = new ArrayList<>();
+
                 int [][] tempBoard = new int [6][7]; // = board.clone();
 
                 for(int i=0; i<6; i++)
@@ -164,6 +170,10 @@ public class Minimax
                 }
 
                 int row = calculateRow(tempBoard, col);
+
+                //System.out.println("===========" + row + "=======" + col);
+
+
 
                 tempBoard[row][col] = ai;
 
@@ -177,20 +187,25 @@ public class Minimax
                 {
                     a = value;
                     move = col;
+                    //System.out.println("+++++" + a + "+++++" + move);
                 }
 
-                /*if (a>=b)
+                //System.out.println("++" + a + "++" + move);
+
+                if (a>=b)
                 {
                     break;
-                }*/
-
-                for (int kute: list)
-                {
-                    //System.out.print("**" + kute);
                 }
 
+                /*for (int kute: list)
+                {
+                    System.out.print("**" + kute);
+                }*/
             }
-            //System.out.println();
+            System.out.println(list);
+            /*System.out.println(validCols);
+            System.out.println(a);
+            System.out.println(move);*/
             return a;
         }
         else
@@ -218,10 +233,10 @@ public class Minimax
                     b = value;
                 }
 
-                /*if (a>=b)
+                if (a>=b)
                 {
                     break;
-                }*/
+                }
             }
             return b;
         }
