@@ -177,17 +177,33 @@ public class Minimax
 
                 tempBoard[row][col] = ai;
 
+
+
                 int value = minimax(tempBoard, a, b, 0, depth-1);
 
+
                 list.add(value);
+
+
                 if (value>a)
                 {
+                    //System.out.println(value);
                     a = value;
                     move = col;
-                    System.out.println("+++++" + a + "+++++" + move);
+                    //System.out.println("+++++" + a + "+++++" + move);
                 }
 
-                System.out.println("++" + a + "++" + move);
+                if (depth==5)
+                {
+                    System.out.println(col);
+                    System.out.println(value);
+                    System.out.println(move);
+                    System.out.println("****");
+                }
+
+
+
+                //System.out.println("++" + a + "++" + move);
 
                 if (a>=b)
                 {
@@ -198,12 +214,12 @@ public class Minimax
                 {
                     System.out.print("**" + kute);
                 }*/
-                System.out.println("****************************");
+                //System.out.println("****************************");
             }
-            System.out.println(list);
+            /*System.out.println(list);
             System.out.println(validCols);
             System.out.println(a);
-            System.out.println(move);
+            System.out.println(move);*/
             return a;
         }
         else
