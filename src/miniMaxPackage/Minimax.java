@@ -8,6 +8,8 @@ public class Minimax
 {
     private int [][] board = new int[6][7];
 
+    String indent = "";
+
     public Minimax(int[][] board) {
         for(int i=0; i<6; i++)
         {
@@ -17,7 +19,7 @@ public class Minimax
             }
         }
 
-        int tempMove = connect3(board, ai);
+        /*int tempMove = connect3(board, ai);
         if (tempMove!=-1)
         {
             move = tempMove;
@@ -26,14 +28,14 @@ public class Minimax
         {
             tempMove = connect3(board, human);
             if (tempMove==-1)
-            {
-                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 10);
-            }
+            {*/
+                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 5);
+            /*}
             else
             {
                 move = tempMove;
             }
-        }
+        }*/
         /*for(int i=0; i<6; i++)
         {
             for(int j=0; j<7; j++)
@@ -113,21 +115,26 @@ public class Minimax
 
     public int minimax (int [][] board, int a, int b, int turn, int depth)
     {
-        if (depth==0)
-        {
-            //System.out.println("ami asi");
-            return 0;
-        }
-
         if (win(board, ai))
         {
+            //System.out.println("ayeeeeee");
             //System.out.println("jitse");
-            return 1*depth;
+            return 500*depth;
         }
+
         if (win(board,human))
         {
+            //System.out.println("jite gelo. theka beta");
             //System.out.println("jitse");
-            return -1*depth;
+            return -500*depth;
+        }
+
+        if (depth==0)
+        {
+            //System.out.println("ami bolod");
+            //System.out.println("ami asi");
+            EvaluationFunction eval = new EvaluationFunction();
+            return 0;//eval.getValue(board, ai);
         }
 
         List<Integer> validCols = new ArrayList<>();
@@ -139,11 +146,13 @@ public class Minimax
         if (turn == 1)
         {
             Random rand = new Random();
-            int kut = rand.nextInt(validCols.size());
-            move = validCols.get(kut);
+            int randInt = rand.nextInt(validCols.size());
+            move = validCols.get(randInt);
 
+            //System.out.println(validCols.size());
             for(int col: validCols)
             {
+                List<Integer> list = new ArrayList<>();
                 int [][] tempBoard = new int [6][7]; // = board.clone();
 
                 for(int i=0; i<6; i++)
@@ -158,20 +167,30 @@ public class Minimax
 
                 tempBoard[row][col] = ai;
 
+                indent = indent + "****";
+                //System.out.println(indent);
                 int value = minimax(tempBoard, a, b, 0, depth-1);
+                //System.out.println(indent.substring(0,indent.length()-4));
 
+                list.add(value);
                 if (value>a)
                 {
                     a = value;
                     move = col;
-                    //System.out.println("----------" + move);
                 }
 
-                if (a>=b)
+                /*if (a>=b)
                 {
                     break;
+                }*/
+
+                for (int kute: list)
+                {
+                    //System.out.print("**" + kute);
                 }
+
             }
+            //System.out.println();
             return a;
         }
         else
@@ -199,10 +218,10 @@ public class Minimax
                     b = value;
                 }
 
-                if (a>=b)
+                /*if (a>=b)
                 {
                     break;
-                }
+                }*/
             }
             return b;
         }
