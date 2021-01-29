@@ -266,7 +266,7 @@ public class Main extends Application {
 
             Button turnText = new Button("AI's Turn");
             turnText.setFont(new Font(22));
-            turnText.setStyle("-fx-background-color: #ffffff");
+            turnText.setStyle("-fx-background-color: #aeaeae");
             turnText.setMinWidth(2*tile_size);
             turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
             FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
@@ -426,19 +426,19 @@ public class Main extends Application {
 
         Button btn = new Button("Connect Four");
         btn.setFont(new Font(22));
-        btn.setStyle("-fx-background-color: #ab7cbf");
+        btn.setStyle("-fx-background-color: #aeaeae");
         btn.setMinWidth(2*tile_size);
         vbox.getChildren().add(btn);
 
         Button turnText = new Button("Your Turn");
         turnText.setFont(new Font(22));
-        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setStyle("-fx-background-color: #aeaeae");
         turnText.setMinWidth(2*tile_size);
         turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
 
         chooseColor = new Button("Choose Color");
         chooseColor.setFont(new Font(22));
-        chooseColor.setStyle("-fx-background-color: #ab7cbf");
+        chooseColor.setStyle("-fx-background-color: #aeaeae");
         chooseColor.setMinWidth(2*tile_size);
         chooseColor.setLayoutY((rows+1)*tile_size / 2 + 250);
 
