@@ -1,5 +1,9 @@
 package sample;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.input.MouseEvent;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -40,6 +44,11 @@ public class Main extends Application {
 
     private Pane discRoot = new Pane();
     Pane left = new Pane();
+
+    static Color humanColor = Color.RED;
+    static Color aiColor = Color.YELLOW;
+    ColorPicker cp;
+    Button chooseColor;
 
 
     private Shape makeGrid() {
@@ -83,7 +92,16 @@ public class Main extends Application {
             rect.setOnMouseExited(e -> rect.setFill(Color.TRANSPARENT));
 
             final int column = i;
-            rect.setOnMouseClicked(e -> placeDisc(new Disc(redMove), column));
+
+            EventHandler<javafx.scene.input.MouseEvent> event1 = new EventHandler<javafx.scene.input.MouseEvent>() {
+                public void handle(MouseEvent e)
+                {
+                    left.getChildren().remove(cp);
+                    left.getChildren().remove(chooseColor);
+                    placeDisc(new Disc(redMove), column);
+                }
+            };
+            rect.setOnMouseClicked(event1);
 
             list.add(rect);
         }
@@ -239,7 +257,7 @@ public class Main extends Application {
 
         if(!isGameEnded)
         {
-            Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, Color.YELLOW);
+            Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, aiColor);
             FadeTransition t = new FadeTransition(Duration.seconds(5), turn);
             t.setFromValue(10);
             t.setToValue(0);
@@ -248,7 +266,7 @@ public class Main extends Application {
 
             Button turnText = new Button("AI's Turn");
             turnText.setFont(new Font(22));
-            turnText.setStyle("-fx-background-color: #ffffff");
+            turnText.setStyle("-fx-background-color: #aeaeae");
             turnText.setMinWidth(2*tile_size);
             turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
             FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
@@ -281,31 +299,6 @@ public class Main extends Application {
             checkWin();
         }
     }
-
-
-
-    /*private boolean gameEnded(int column, int row) {
-        List<Point2D> vertical = IntStream.rangeClosed(row - 3, row + 3)
-                .mapToObj(r -> new Point2D(column, r))
-                .collect(Collectors.toList());
-
-        List<Point2D> horizontal = IntStream.rangeClosed(column - 3, column + 3)
-                .mapToObj(c -> new Point2D(c, row))
-                .collect(Collectors.toList());
-
-        Point2D topLeft = new Point2D(column - 3, row - 3);
-        List<Point2D> diagonal1 = IntStream.rangeClosed(0, 6)
-                .mapToObj(i -> topLeft.add(i, i))
-                .collect(Collectors.toList());
-
-        Point2D botLeft = new Point2D(column - 3, row + 3);
-        List<Point2D> diagonal2 = IntStream.rangeClosed(0, 6)
-                .mapToObj(i -> botLeft.add(i, -i))
-                .collect(Collectors.toList());
-
-        return checkRange(vertical) || checkRange(horizontal)
-                || checkRange(diagonal1) || checkRange(diagonal2);
-    }*/
 
     private boolean checkRange(List<Point2D> points) {
         int chain = 0;
@@ -344,12 +337,12 @@ public class Main extends Application {
         Button turnText = null;
         if (player==human)
         {
-            turn = new Circle(tile_size / 2, Color.RED);
+            turn = new Circle(tile_size / 2, humanColor);
             turnText = new Button("You");
         }
         else if (player==ai)
         {
-            turn = new Circle(tile_size / 2, Color.YELLOW);
+            turn = new Circle(tile_size / 2, aiColor);
             turnText = new Button("AI");
         }
 
@@ -365,14 +358,14 @@ public class Main extends Application {
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
 
-        for(int i=0; i<6; i++)
-        {
-            for(int j=0; j<7; j++)
-            {
-                System.out.print(board[i][j]+"-------");
-            }
-            System.out.println();
-        }
+//        for(int i=0; i<6; i++)
+//        {
+//            for(int j=0; j<7; j++)
+//            {
+//                System.out.print(board[i][j]+"-------");
+//            }
+//            System.out.println();
+//        }
     }
 
     private Optional<Disc> getDisc(int column, int row) {
@@ -386,7 +379,7 @@ public class Main extends Application {
     private static class Disc extends Circle {
         private final boolean red;
         public Disc(boolean red) {
-            super(tile_size / 2, red ? Color.RED : Color.YELLOW);
+            super(tile_size / 2, red ? humanColor : aiColor);
             this.red = red;
 
             setCenterX(tile_size / 2);
@@ -399,7 +392,7 @@ public class Main extends Application {
         GridPane root = new GridPane();
 
         left.setPrefSize(2*tile_size, columns* tile_size);
-        Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
+        Circle turn = new Circle(tile_size / 2, redMove ? humanColor : aiColor);
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
@@ -408,20 +401,47 @@ public class Main extends Application {
 
         Button btn = new Button("Connect Four");
         btn.setFont(new Font(22));
-        btn.setStyle("-fx-background-color: #ab7cbf");
+        btn.setStyle("-fx-background-color: #aeaeae");
         btn.setMinWidth(2*tile_size);
         vbox.getChildren().add(btn);
 
         Button turnText = new Button("Your Turn");
         turnText.setFont(new Font(22));
-        turnText.setStyle("-fx-background-color: #ffffff");
+        turnText.setStyle("-fx-background-color: #aeaeae");
         turnText.setMinWidth(2*tile_size);
         turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
 
+        chooseColor = new Button("Choose Color");
+        chooseColor.setFont(new Font(22));
+        chooseColor.setStyle("-fx-background-color: #aeaeae");
+        chooseColor.setMinWidth(2*tile_size);
+        chooseColor.setLayoutY((rows+1)*tile_size / 2 + 250);
+
+        cp = new ColorPicker(Color.RED);
+        cp.setMinWidth(2*tile_size);
+        cp.setLayoutY((rows+1)*tile_size / 2 + 300);
+
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+                // color
+                humanColor = cp.getValue();
+                aiColor = humanColor.invert();
+                turn.setFill(humanColor);
+
+                left.getChildren().remove(cp);
+                left.getChildren().remove(chooseColor);
+            }
+        };
+
+        // set listener
+        cp.setOnAction(event);
 
         left.getChildren().add(vbox);
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
+        left.getChildren().add(cp);
+        left.getChildren().add(chooseColor);
 
         Pane right = new Pane();
         right.getChildren().add(discRoot);

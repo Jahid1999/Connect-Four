@@ -8,6 +8,8 @@ public class Minimax
 {
     private int [][] board = new int[6][7];
 
+    int highestDepth = 5;
+
     public Minimax(int[][] board) {
         for(int i=0; i<6; i++)
         {
@@ -17,7 +19,16 @@ public class Minimax
             }
         }
 
-        int tempMove = connect3(board, ai);
+        /*List<Integer> validCols = new ArrayList<>();
+
+        calculateValidCols(board, validCols);
+        Random rand = new Random();
+        int randInt = rand.nextInt(validCols.size());
+        move = validCols.get(randInt);
+
+        System.out.println(move);*/
+
+        /*int tempMove = connect3(board, ai);
         if (tempMove!=-1)
         {
             move = tempMove;
@@ -26,14 +37,14 @@ public class Minimax
         {
             tempMove = connect3(board, human);
             if (tempMove==-1)
-            {
-                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, 10);
-            }
+            {*/
+                minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, highestDepth);
+            /*}
             else
             {
                 move = tempMove;
             }
-        }
+        }*/
         /*for(int i=0; i<6; i++)
         {
             for(int j=0; j<7; j++)
@@ -50,7 +61,7 @@ public class Minimax
     private int human = 1;
     private int ai = 5;//2;
 
-    private int move;
+    private int move=-1;
 
     public int getMove() {
         return move;
@@ -113,21 +124,26 @@ public class Minimax
 
     public int minimax (int [][] board, int a, int b, int turn, int depth)
     {
-        if (depth==0)
-        {
-            //System.out.println("ami asi");
-            return 0;
-        }
-
         if (win(board, ai))
         {
+            //System.out.println("ayeeeeee");
             //System.out.println("jitse");
-            return 1*depth;
+            return 500*depth;
         }
+
         if (win(board,human))
         {
+            //System.out.println("jite gelo. theka beta");
             //System.out.println("jitse");
-            return -1*depth;
+            return -500*depth;
+        }
+
+        if (depth==0)
+        {
+            //System.out.println("ami bolod");
+            //System.out.println("ami asi");
+            EvaluationFunction eval = new EvaluationFunction();
+            return eval.getValue(board, ai);
         }
 
         List<Integer> validCols = new ArrayList<>();
@@ -138,12 +154,11 @@ public class Minimax
 
         if (turn == 1)
         {
-            Random rand = new Random();
-            int kut = rand.nextInt(validCols.size());
-            move = validCols.get(kut);
-
+            //System.out.println(validCols.size());
+            List<Integer> list = new ArrayList<>();
             for(int col: validCols)
             {
+
                 int [][] tempBoard = new int [6][7]; // = board.clone();
 
                 for(int i=0; i<6; i++)
@@ -156,22 +171,58 @@ public class Minimax
 
                 int row = calculateRow(tempBoard, col);
 
+                //System.out.println("===========" + row + "=======" + col);
+
+
+
                 tempBoard[row][col] = ai;
+
+
 
                 int value = minimax(tempBoard, a, b, 0, depth-1);
 
+
+                list.add(value);
+
+
                 if (value>a)
                 {
+                    //System.out.println(value);
                     a = value;
-                    move = col;
-                    //System.out.println("----------" + move);
+
+                    if (depth==highestDepth)
+                    {
+                        move = col;
+                    }
+
+                    //System.out.println("+++++" + a + "+++++" + move);
                 }
+
+                if (depth==5)
+                {
+                    /*System.out.println(col);
+                    System.out.println(value);
+                    System.out.println(move);
+                    System.out.println("****");*/
+                }
+
+
+
+                //System.out.println("++" + a + "++" + move);
 
                 if (a>=b)
                 {
                     break;
                 }
+
+                /*for (int kute: list)
+                {
+                    System.out.print("**" + kute);
+                }*/
+                //System.out.println("****************************");
             }
+//            System.out.println(list);
+//            System.out.println(validCols);
             return a;
         }
         else
