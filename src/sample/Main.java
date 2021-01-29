@@ -192,7 +192,11 @@ public class Main extends Application {
         if(winning(board, human))
         {
             gameOver(human);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Congratulations! You have won!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Congratulations! You have won!");
+            alert.setTitle("Connect Four");
+            Circle turn = new Circle(tile_size / 4,aiColor);
+            alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
@@ -203,7 +207,11 @@ public class Main extends Application {
         if(winning(board, ai))
         {
             gameOver(ai);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "OOPS! You have lost!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("OOPS! You have lost!");
+            alert.setTitle("Connect Four");
+            Circle turn = new Circle(tile_size / 4,humanColor);
+            alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
