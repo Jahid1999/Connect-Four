@@ -300,31 +300,6 @@ public class Main extends Application {
         }
     }
 
-
-
-    /*private boolean gameEnded(int column, int row) {
-        List<Point2D> vertical = IntStream.rangeClosed(row - 3, row + 3)
-                .mapToObj(r -> new Point2D(column, r))
-                .collect(Collectors.toList());
-
-        List<Point2D> horizontal = IntStream.rangeClosed(column - 3, column + 3)
-                .mapToObj(c -> new Point2D(c, row))
-                .collect(Collectors.toList());
-
-        Point2D topLeft = new Point2D(column - 3, row - 3);
-        List<Point2D> diagonal1 = IntStream.rangeClosed(0, 6)
-                .mapToObj(i -> topLeft.add(i, i))
-                .collect(Collectors.toList());
-
-        Point2D botLeft = new Point2D(column - 3, row + 3);
-        List<Point2D> diagonal2 = IntStream.rangeClosed(0, 6)
-                .mapToObj(i -> botLeft.add(i, -i))
-                .collect(Collectors.toList());
-
-        return checkRange(vertical) || checkRange(horizontal)
-                || checkRange(diagonal1) || checkRange(diagonal2);
-    }*/
-
     private boolean checkRange(List<Point2D> points) {
         int chain = 0;
 
@@ -383,14 +358,14 @@ public class Main extends Application {
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
 
-        for(int i=0; i<6; i++)
-        {
-            for(int j=0; j<7; j++)
-            {
-                System.out.print(board[i][j]+"-------");
-            }
-            System.out.println();
-        }
+//        for(int i=0; i<6; i++)
+//        {
+//            for(int j=0; j<7; j++)
+//            {
+//                System.out.print(board[i][j]+"-------");
+//            }
+//            System.out.println();
+//        }
     }
 
     private Optional<Disc> getDisc(int column, int row) {

@@ -221,10 +221,8 @@ public class Minimax
                 }*/
                 //System.out.println("****************************");
             }
-            System.out.println(list);
-            System.out.println(validCols);
-            /*System.out.println(a);
-            System.out.println(move);*/
+//            System.out.println(list);
+//            System.out.println(validCols);
             return a;
         }
         else
