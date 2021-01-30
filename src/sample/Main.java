@@ -3,7 +3,9 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.ImagePattern;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -210,6 +212,9 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
+//            Image im = new Image("/images/3m1.jpg", false);
+//            Circle turn = new Circle(tile_size / 4);
+
             Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
 
@@ -308,26 +313,26 @@ public class Main extends Application {
         }
     }
 
-    private boolean checkRange(List<Point2D> points) {
-        int chain = 0;
-
-        for (Point2D p : points) {
-            int column = (int) p.getX();
-            int row = (int) p.getY();
-
-            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
-            if (disc.red == redMove) {
-                chain++;
-                if (chain == 4) {
-                    return true;
-                }
-            } else {
-                chain = 0;
-            }
-        }
-
-        return false;
-    }
+//    private boolean checkRange(List<Point2D> points) {
+//        int chain = 0;
+//
+//        for (Point2D p : points) {
+//            int column = (int) p.getX();
+//            int row = (int) p.getY();
+//
+//            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
+//            if (disc.red == redMove) {
+//                chain++;
+//                if (chain == 4) {
+//                    return true;
+//                }
+//            } else {
+//                chain = 0;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     private void gameOver(int player) {
         isGameEnded = true;
@@ -405,12 +410,25 @@ public class Main extends Application {
         turn.setCenterY(rows*tile_size / 2);
 
         VBox vbox = new VBox();
-        vbox.setFillWidth(true);
 
-        Button btn = new Button("Connect Four");
+        Button btn = new Button("About Us");
         btn.setFont(new Font(22));
-        btn.setStyle("-fx-background-color: #aeaeae");
+        btn.setStyle("-fx-background-color: #a35103");
         btn.setMinWidth(2*tile_size);
+        btn.setOnAction(e-> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("3 Musketeers");
+            alert.setTitle("About Us");
+            String content = String.format("\t\t\t\t\tTeam: 3 Musketeers \nTeam Members: \n\t1.Yasin Sazid(BSSE 1006)" +
+                    "\n\t2.Atkia Akila Karim(BSSE 1015)\n\t3.Abdullah-Al-Jahid(BSSE 1030)");
+            alert.setContentText(content);
+            alert.getDialogPane().setMinWidth(500);
+            Image im = new Image("/images/3m2.jpg", false);
+            Circle dp = new Circle(60);
+            dp.setFill(new ImagePattern(im));
+            alert.setGraphic(dp);
+            alert.show();
+        });
         vbox.getChildren().add(btn);
 
         Button turnText = new Button("Your Turn");
