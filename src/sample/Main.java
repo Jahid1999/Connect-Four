@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -48,8 +49,8 @@ public class Main extends Application {
     private Pane discRoot = new Pane();
     Pane left = new Pane();
 
-    static Color humanColor = Color.RED;
-    static Color aiColor = Color.YELLOW;
+    static Color humanColor = Color.DARKSLATEGREY;
+    static Color aiColor = Color.DARKCYAN;
     ColorPicker cp;
     Button chooseColor;
 
@@ -280,7 +281,7 @@ public class Main extends Application {
 
             Button turnText = new Button("AI's Turn");
             turnText.setFont(new Font(22));
-            turnText.setStyle("-fx-background-color: #aeaeae");
+            turnText.setStyle("-fx-background-color: #777d80");
             turnText.setMinWidth(2*tile_size);
             turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
             FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
@@ -414,14 +415,16 @@ public class Main extends Application {
 
         Button about = new Button("About Us");
         about.setFont(new Font(22));
-        about.setStyle("-fx-background-color: #ffffff");
+        about.setStyle("-fx-background-color: #777d80");
         about.setMinWidth(2*tile_size);
         about.setOnAction(e-> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("3 Musketeers");
             alert.setTitle("About Us");
-            String content = String.format("\t\t\t\t\tTeam: 3 Musketeers \nTeam Members: \n\t1.Yasin Sazid(BSSE 1006)" +
-                    "\n\t2.Atkia Akila Karim(BSSE 1015)\n\t3.Abdullah-Al-Jahid(BSSE 1030)");
+            /*String content = String.format("\t\t\t\t\tTeam: 3 Musketeers \nTeam Members: \n\t1.Yasin Sazid(BSSE 1006)" +
+                    "\n\t2.Atkia Akila Karim(BSSE 1015)\n\t3.Abdullah-Al-Jahid(BSSE 1030)");*/
+            String content = String.format("Developers: \n\t\t\tYasin Sazid (BSSE 1006)" +
+                    "\n\n\t\t\tAtkia Akila Karim (BSSE 1015)\n\n\t\t\tAbdullah-Al-Jahid (BSSE 1030)");
             alert.setContentText(content);
             alert.getDialogPane().setMinWidth(500);
             Image im = new Image("/images/3m2.jpg", false);
@@ -432,26 +435,26 @@ public class Main extends Application {
         });
         Button help = new Button("Help");
         help.setFont(new Font(22));
-        help.setStyle("-fx-background-color: #a35103");
+        help.setStyle("-fx-background-color: #636c89");
         help.setMinWidth(2*tile_size);
         help.setOnAction(e-> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("About Connect Four");
-            alert.setTitle("Help!!");
-            String content = String.format("Description: \n\nConnect Four (also known as Four Up, Plot Four, Find Four, Four in a Row," +
+            alert.setTitle("Help");
+            String content = String.format("Description:\nConnect Four (also known as Four Up, Plot Four, Find Four, Four in a Row," +
                     "Drop Four, and Gravitrips in the Soviet Union) is a two-player connection board game, in which the players" +
-                    "\nchoose a color and then take turns dropping colored discs into a seven-column, six-row " +
-                    "\nvertically suspended grid. The pieces fall straight down, occupying the lowest available " +
-                    "\nspace within the column. The objective of the game is to be the first to form a horizontal, " +
-                    "\nvertical, or diagonal line of four of one's own discs." +
-                    "\n\nObjective:\n\n" +
+                    "choose a color and then take turns dropping colored discs into a seven-column, six-row " +
+                    "vertically suspended grid. The pieces fall straight down, occupying the lowest available " +
+                    "space within the column. The objective of the game is to be the first to form a horizontal, " +
+                    "vertical, or diagonal line of four of one's own discs." +
+                    "\n\n\nObjective:\n" +
                     "The aim for both players is to make a straight line of four own pieces; the line can be vertical, horizontal or diagonal.\n" +
-                    "\nHow The Game Goes On:\n\n" +
+                    "\n\nHow The Game Goes On:\n" +
                     "Each player takes alternating turns. During each player’s turn, drop a colored piece of that player’s color into the slots of the game board." +
                     "The players take turns dropping pieces into the slots. These pieces fall to the bottom of the board and the game continues until one player has " +
                     "four in a row and wins or until the board fills up, which results in a tie." +
-                    "\n\nStrategy:\n\n" +
-                    "1.Beginners: Remember to check all possible connecting lines, including horizontal, vertical and diagonal lines for possible threats.\n" +
+                    "\n\n\nStrategy:\n" +
+                    "1.Beginner: Remember to check all possible connecting lines, including horizontal, vertical and diagonal lines for possible threats.\n" +
                     "2.Advanced: A key strategy to win is by making two simultaneous threats for the opponent. Usually this involves connecting three discs to " +
                     "prevent the opponent from having an advantage in that column. Also, remember that discs placed in the middle are more valuable then those place " +
                     "on the sides because players have more chances of creating four in a row with them.");
@@ -470,19 +473,19 @@ public class Main extends Application {
 
         Button turnText = new Button("Your Turn");
         turnText.setFont(new Font(22));
-        turnText.setStyle("-fx-background-color: #aeaeae");
+        turnText.setStyle("-fx-background-color: #777d80");
         turnText.setMinWidth(2*tile_size);
         turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
 
         chooseColor = new Button("Choose Color");
         chooseColor.setFont(new Font(22));
-        chooseColor.setStyle("-fx-background-color: #aeaeae");
+        chooseColor.setStyle("-fx-background-color: #636c89");
         chooseColor.setMinWidth(2*tile_size);
-        chooseColor.setLayoutY((rows+1)*tile_size / 2 + 250);
+        chooseColor.setLayoutY((rows+1)*tile_size / 2 + 276);
 
-        cp = new ColorPicker(Color.RED);
+        cp = new ColorPicker(Color.DARKSLATEGREY);
         cp.setMinWidth(2*tile_size);
-        cp.setLayoutY((rows+1)*tile_size / 2 + 300);
+        cp.setLayoutY((rows+1)*tile_size / 2 + 325);
 
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
@@ -505,6 +508,8 @@ public class Main extends Application {
         left.getChildren().add(turnText);
         left.getChildren().add(cp);
         left.getChildren().add(chooseColor);
+
+        left.setStyle("-fx-background-color: #b4bcc1");
 
         Pane right = new Pane();
         right.getChildren().add(discRoot);
