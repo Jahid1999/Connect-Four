@@ -3,7 +3,10 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.ImagePattern;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -210,6 +213,9 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
+//            Image im = new Image("/images/3m1.jpg", false);
+//            Circle turn = new Circle(tile_size / 4);
+
             Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
 
@@ -308,26 +314,26 @@ public class Main extends Application {
         }
     }
 
-    private boolean checkRange(List<Point2D> points) {
-        int chain = 0;
-
-        for (Point2D p : points) {
-            int column = (int) p.getX();
-            int row = (int) p.getY();
-
-            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
-            if (disc.red == redMove) {
-                chain++;
-                if (chain == 4) {
-                    return true;
-                }
-            } else {
-                chain = 0;
-            }
-        }
-
-        return false;
-    }
+//    private boolean checkRange(List<Point2D> points) {
+//        int chain = 0;
+//
+//        for (Point2D p : points) {
+//            int column = (int) p.getX();
+//            int row = (int) p.getY();
+//
+//            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
+//            if (disc.red == redMove) {
+//                chain++;
+//                if (chain == 4) {
+//                    return true;
+//                }
+//            } else {
+//                chain = 0;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     private void gameOver(int player) {
         isGameEnded = true;
@@ -405,13 +411,62 @@ public class Main extends Application {
         turn.setCenterY(rows*tile_size / 2);
 
         VBox vbox = new VBox();
-        vbox.setFillWidth(true);
 
-        Button btn = new Button("Connect Four");
-        btn.setFont(new Font(22));
-        btn.setStyle("-fx-background-color: #aeaeae");
-        btn.setMinWidth(2*tile_size);
-        vbox.getChildren().add(btn);
+        Button about = new Button("About Us");
+        about.setFont(new Font(22));
+        about.setStyle("-fx-background-color: #ffffff");
+        about.setMinWidth(2*tile_size);
+        about.setOnAction(e-> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("3 Musketeers");
+            alert.setTitle("About Us");
+            String content = String.format("\t\t\t\t\tTeam: 3 Musketeers \nTeam Members: \n\t1.Yasin Sazid(BSSE 1006)" +
+                    "\n\t2.Atkia Akila Karim(BSSE 1015)\n\t3.Abdullah-Al-Jahid(BSSE 1030)");
+            alert.setContentText(content);
+            alert.getDialogPane().setMinWidth(500);
+            Image im = new Image("/images/3m2.jpg", false);
+            Circle dp = new Circle(60);
+            dp.setFill(new ImagePattern(im));
+            alert.setGraphic(dp);
+            alert.show();
+        });
+        Button help = new Button("Help");
+        help.setFont(new Font(22));
+        help.setStyle("-fx-background-color: #a35103");
+        help.setMinWidth(2*tile_size);
+        help.setOnAction(e-> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("About Connect Four");
+            alert.setTitle("Help!!");
+            String content = String.format("Description: \n\nConnect Four (also known as Four Up, Plot Four, Find Four, Four in a Row," +
+                    "Drop Four, and Gravitrips in the Soviet Union) is a two-player connection board game, in which the players" +
+                    "\nchoose a color and then take turns dropping colored discs into a seven-column, six-row " +
+                    "\nvertically suspended grid. The pieces fall straight down, occupying the lowest available " +
+                    "\nspace within the column. The objective of the game is to be the first to form a horizontal, " +
+                    "\nvertical, or diagonal line of four of one's own discs." +
+                    "\n\nObjective:\n\n" +
+                    "The aim for both players is to make a straight line of four own pieces; the line can be vertical, horizontal or diagonal.\n" +
+                    "\nHow The Game Goes On:\n\n" +
+                    "Each player takes alternating turns. During each player’s turn, drop a colored piece of that player’s color into the slots of the game board." +
+                    "The players take turns dropping pieces into the slots. These pieces fall to the bottom of the board and the game continues until one player has " +
+                    "four in a row and wins or until the board fills up, which results in a tie." +
+                    "\n\nStrategy:\n\n" +
+                    "1.Beginners: Remember to check all possible connecting lines, including horizontal, vertical and diagonal lines for possible threats.\n" +
+                    "2.Advanced: A key strategy to win is by making two simultaneous threats for the opponent. Usually this involves connecting three discs to " +
+                    "prevent the opponent from having an advantage in that column. Also, remember that discs placed in the middle are more valuable then those place " +
+                    "on the sides because players have more chances of creating four in a row with them.");
+            alert.setContentText(content);
+            alert.getDialogPane().setMinWidth(650);
+            alert.getDialogPane().setMinHeight(700);
+            Image im = new Image("/images/3m2.jpg", false);
+            Circle dp = new Circle(60);
+            dp.setFill(new ImagePattern(im));
+            alert.setGraphic(dp);
+            alert.show();
+        });
+
+        vbox.getChildren().add(0,about);
+        vbox.getChildren().add(1,help);
 
         Button turnText = new Button("Your Turn");
         turnText.setFont(new Font(22));
