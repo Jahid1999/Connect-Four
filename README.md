@@ -1,10 +1,14 @@
    # Connect Four
 
 A repository for implementing **"Connect Four"** game in as a group project for academic purpose.
+
 **Developers:**
-		Yasin Sazid (BSSE 1006)
-		Atkia Akila Karim (BSSE 1015)
-		Abdullah-Al-Jahid (BSSE 1030)
+
+   [Yasin Sazid](https://github.com/bsse1006) (BSSE 1006)
+		
+   [Atkia Akila Karim](https://github.com/atkia) (BSSE 1015)
+		
+   [Abdullah-Al-Jahid](https://github.com/Jahid1999) (BSSE 1030)
 
 **Technology Used:** Java, JavaFX
 
@@ -37,7 +41,10 @@ A repository for implementing **"Connect Four"** game in as a group project for 
   Cutting off search is done at game tree depth = 5
 
 **Additional Logic:**
-    1.In cases where Human can win with a single move, AI will block that move without making the game tree.
-    2.In cases where AI can win with a single move, AI will make that move without making the game tree.
-    3.Utility value for winning is inversely proportional to depth of the winning node in the game tree.
+
+   1.In cases where Human can win with a single move, AI will block that move without making the game tree.
+    
+   2.In cases where AI can win with a single move, AI will make that move without making the game tree.
+    
+   3.Utility value for winning is inversely proportional to depth of the winning node in the game tree.
 
