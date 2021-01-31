@@ -1,6 +1,6 @@
    # Connect Four
 
-A repository for implementing **"Connect Four"** game in as a group project for academic purpose.
+A repository for implementing **"Connect Four"** game as a group project for academic purpose.
 
 **Developers:**
 
