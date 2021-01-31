@@ -455,6 +455,7 @@ public class Main extends Application {
                     "2.Advanced: A key strategy to win is by making two simultaneous threats for the opponent. Usually this involves connecting three discs to " +
                     "prevent the opponent from having an advantage in that column. Also, remember that discs placed in the middle are more valuable then those place " +
                     "on the sides because players have more chances of creating four in a row with them.");
+
             alert.setContentText(content);
             alert.getDialogPane().setMinWidth(650);
             alert.getDialogPane().setMinHeight(700);
