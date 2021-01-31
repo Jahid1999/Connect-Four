@@ -39,7 +39,7 @@ public class Main extends Application {
     private static final int columns = 7;
     private static final int rows = 6;
     int human =1;
-    int ai =5;//2;
+    int ai =5;
 
     private boolean redMove = true;
     private boolean isGameEnded = false;
@@ -178,7 +178,7 @@ public class Main extends Application {
         return row;
     }
 
-    public boolean isValidCol (int col)
+    /*public boolean isValidCol (int col)
     {
         for (int i=0; i<rows; i++)
         {
@@ -189,7 +189,7 @@ public class Main extends Application {
         }
 
         return false;
-    }
+    }*/
 
     public void checkWin ()
     {
@@ -214,8 +214,6 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
-//            Image im = new Image("/images/3m1.jpg", false);
-//            Circle turn = new Circle(tile_size / 4);
 
             Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
@@ -239,7 +237,6 @@ public class Main extends Application {
         {
             grid[column][row] = disc;
             board[5-row][column] = human;
-            //System.out.println("-------------" + row);
         }
 
         discRoot.getChildren().add(disc);
@@ -262,8 +259,6 @@ public class Main extends Application {
             a2 =animation;
         }
 
-        //animation.play();
-
         SequentialTransition st = new SequentialTransition(disc, a1, new PauseTransition(Duration.seconds(1)), a2);
 
         st.play();
@@ -273,7 +268,7 @@ public class Main extends Application {
         if(!isGameEnded)
         {
             Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, aiColor);
-            FadeTransition t = new FadeTransition(Duration.seconds(5), turn);
+            FadeTransition t = new FadeTransition(Duration.seconds(4), turn);
             t.setFromValue(10);
             t.setToValue(0);
             t.play();
@@ -284,29 +279,21 @@ public class Main extends Application {
             turnText.setStyle("-fx-background-color: #777d80");
             turnText.setMinWidth(2*tile_size);
             turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
-            FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
+            FadeTransition fade = new FadeTransition(Duration.seconds(4), turnText);
             fade.setFromValue(10);
             fade.setToValue(0);
             fade.play();
             left.getChildren().add(turnText);
-
-            //Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
-            //Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
         }
         redMove = !redMove;
         if(!redMove)
         {
-
             Minimax minimax = new Minimax(board);
             int col = minimax.getMove();
 
             int rowAI = minimax.calculateRow(board, col);
             int rowUI = calUIRow(col);
-            /*System.out.println("row---" + rowAI);
-            System.out.println("col---" + col);*/
             placeDisc(new Disc(redMove), col);
-
-            //System.out.println("col----" + col);
 
             grid[col][rowUI] = disc;
             board[rowAI][col] = ai;
@@ -314,27 +301,6 @@ public class Main extends Application {
             checkWin();
         }
     }
-
-//    private boolean checkRange(List<Point2D> points) {
-//        int chain = 0;
-//
-//        for (Point2D p : points) {
-//            int column = (int) p.getX();
-//            int row = (int) p.getY();
-//
-//            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
-//            if (disc.red == redMove) {
-//                chain++;
-//                if (chain == 4) {
-//                    return true;
-//                }
-//            } else {
-//                chain = 0;
-//            }
-//        }
-//
-//        return false;
-//    }
 
     private void gameOver(int player) {
         isGameEnded = true;
@@ -372,15 +338,6 @@ public class Main extends Application {
         left.getChildren().add(winner);
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
-
-//        for(int i=0; i<6; i++)
-//        {
-//            for(int j=0; j<7; j++)
-//            {
-//                System.out.print(board[i][j]+"-------");
-//            }
-//            System.out.println();
-//        }
     }
 
     private Optional<Disc> getDisc(int column, int row) {
