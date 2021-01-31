@@ -427,7 +427,7 @@ public class Main extends Application {
                     "\n\n\t\t\tAtkia Akila Karim (BSSE 1015)\n\n\t\t\tAbdullah-Al-Jahid (BSSE 1030)");
             alert.setContentText(content);
             alert.getDialogPane().setMinWidth(500);
-            Image im = new Image("/images/3m2.jpg", false);
+            Image im = new Image("/images/3m3.jpg", false);
             Circle dp = new Circle(60);
             dp.setFill(new ImagePattern(im));
             alert.setGraphic(dp);
