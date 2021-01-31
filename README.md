@@ -13,10 +13,14 @@ A repository for implementing **"Connect Four"** game as a group project for aca
 **Technology Used:** Java, JavaFX
 
 **Features:**
-    1.Connect 4 board game
-    2.Choosing disc colour
-    3.Turn indicator
-    4.Help button for gameplay details
+
+   1.Connect 4 board game
+    
+   2.Choosing disc colour
+    
+   3.Turn indicator
+    
+   4.Help button for gameplay details
 
 **Game Mechanics:**
 
