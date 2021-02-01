@@ -493,8 +493,8 @@ public class Main extends Application {
             alert.setContentText(content);
             alert.getDialogPane().setMinWidth(650);
             alert.getDialogPane().setMinHeight(700);
-            Image im = new Image("/images/3m2.jpg", false);
-            Circle dp = new Circle(60);
+            Image im = new Image("/images/connect4.png", false);
+            Circle dp = new Circle(50);
             dp.setFill(new ImagePattern(im));
             alert.setGraphic(dp);
             alert.show();
