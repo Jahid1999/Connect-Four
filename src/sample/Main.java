@@ -587,12 +587,12 @@ public class Main extends Application {
         primaryStage.setTitle("Connect Four");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("/images/connect4.png"));
         primaryStage.show();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        startGame(primaryStage);
+    public void initialAlert ()
+    {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("How To Start The Game");
         alert.setTitle("Connect Four");
@@ -606,6 +606,12 @@ public class Main extends Application {
         dp.setFill(new ImagePattern(im));
         alert.setGraphic(dp);
         alert.show();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        startGame(primaryStage);
+        initialAlert();
     }
 
     public static void main(String[] args) {
