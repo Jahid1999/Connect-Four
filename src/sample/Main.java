@@ -587,6 +587,7 @@ public class Main extends Application {
         primaryStage.setTitle("Connect Four");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("/images/connect4.png"));
         primaryStage.show();
     }
 
