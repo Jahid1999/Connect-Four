@@ -57,6 +57,7 @@ public class Main extends Application {
     static Color aiColor = Color.DARKCYAN;
     ColorPicker cp;
     Button chooseColor;
+    Button start;
 
 
     private Shape makeGrid() {
@@ -106,6 +107,7 @@ public class Main extends Application {
                 {
                     left.getChildren().remove(cp);
                     left.getChildren().remove(chooseColor);
+                    left.getChildren().remove(start);
                     placeDisc(new Disc(redMove), column);
                 }
             };
@@ -304,12 +306,8 @@ public class Main extends Application {
         discRoot.getChildren().add(disc);
         disc.setTranslateX(column * (tile_size + 5) + tile_size / 4);
 
-        final int currentRow = row;
         TranslateTransition animation = new TranslateTransition(Duration.seconds(1), disc);
         animation.setToY((row * (tile_size + 5) + tile_size / 4)+1.5*tile_size);
-        animation.setOnFinished(e -> {
-
-        });
 
         if (redMove)
         {
@@ -374,7 +372,7 @@ public class Main extends Application {
         winner.setFont(new Font(22));
         winner.setStyle("-fx-background-color: #b09d21");
         winner.setMinWidth(2*tile_size);
-        winner.setLayoutY((rows-2)*tile_size / 2);
+        winner.setLayoutY(((rows-2)*tile_size / 2)-10);
 
         Circle turn = null;
         Button turnText = null;
@@ -419,6 +417,20 @@ public class Main extends Application {
             setCenterX(tile_size / 2);
             setCenterY(-tile_size);
         }
+    }
+
+    public void firstAIMove (Disc disc)
+    {
+        grid[3][5] = disc;
+        board[0][3] = ai;
+
+        discRoot.getChildren().add(disc);
+        disc.setTranslateX(3 * (tile_size + 5) + tile_size / 4);
+
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), disc);
+        animation.setToY((5 * (tile_size + 5) + tile_size / 4)+1.5*tile_size);
+
+        animation.play();
     }
 
     public void startGame (Stage primaryStage)
@@ -497,9 +509,35 @@ public class Main extends Application {
         turnText.setMinWidth(2*tile_size);
         turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
 
+        start = new Button("START");
+        start.setFont(new Font(22));
+        start.setStyle("-fx-background-color: #0f8080");
+        start.setMinWidth(2*tile_size);
+        start.setLayoutY((rows+1)*tile_size / 2 + 10);
+
+        EventHandler<ActionEvent> st = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e)
+            {
+                left.getChildren().remove(cp);
+                left.getChildren().remove(chooseColor);
+                FadeTransition fade = new FadeTransition(Duration.seconds(2), start);
+                fade.setFromValue(10);
+                fade.setToValue(0);
+                fade.play();
+
+                fade.setOnFinished(ex -> {
+                    left.getChildren().remove(start);
+                });
+
+                firstAIMove(new Disc(false));
+            }
+        };
+
+        start.setOnAction(st);
+
         chooseColor = new Button("Choose Color");
         chooseColor.setFont(new Font(22));
-        chooseColor.setStyle("-fx-background-color: #636c89");
+        chooseColor.setStyle("-fx-background-color: #777d80");
         chooseColor.setMinWidth(2*tile_size);
         chooseColor.setLayoutY((rows+1)*tile_size / 2 + 276);
 
@@ -524,9 +562,10 @@ public class Main extends Application {
 
         left.getChildren().add(vbox);
         left.getChildren().add(turn);
-        left.getChildren().add(turnText);
         left.getChildren().add(cp);
         left.getChildren().add(chooseColor);
+        left.getChildren().add(turnText);
+        left.getChildren().add(start);
 
         left.setStyle("-fx-background-color: #b4bcc1");
 
