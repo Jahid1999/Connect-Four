@@ -257,7 +257,7 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
-            Circle turn = new Circle(tile_size / 4,aiColor);
+            Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -274,7 +274,7 @@ public class Main extends Application {
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
 
-            Circle turn = new Circle(tile_size / 4,humanColor);
+            Circle turn = new Circle(tile_size / 4,aiColor);
             alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -478,23 +478,26 @@ public class Main extends Application {
                     "vertically suspended grid. The pieces fall straight down, occupying the lowest available " +
                     "space within the column. The objective of the game is to be the first to form a horizontal, " +
                     "vertical, or diagonal line of four of one's own discs." +
-                    "\n\n\nObjective:\n" +
+                    "\n\nObjective:\n" +
                     "The aim for both players is to make a straight line of four own pieces; the line can be vertical, horizontal or diagonal.\n" +
-                    "\n\nHow The Game Goes On:\n" +
+                    "\nHow The Game Starts:\n" +
+                    "1. Human First: You can make the first move by clicking your desired column within the board.\n" +
+                    "2. AI First: AI will make the first move if you click the START button.\n" +
+                    "\nHow The Game Goes On:\n" +
                     "Each player takes alternating turns. During each player’s turn, drop a colored piece of that player’s color into the slots of the game board." +
                     "The players take turns dropping pieces into the slots. These pieces fall to the bottom of the board and the game continues until one player has " +
                     "four in a row and wins or until the board fills up, which results in a tie." +
-                    "\n\n\nStrategy:\n" +
-                    "1.Beginner: Remember to check all possible connecting lines, including horizontal, vertical and diagonal lines for possible threats.\n" +
-                    "2.Advanced: A key strategy to win is by making two simultaneous threats for the opponent. Usually this involves connecting three discs to " +
+                    "\n\nStrategy:\n" +
+                    "1. Beginner: Remember to check all possible connecting lines, including horizontal, vertical and diagonal lines for possible threats.\n" +
+                    "2. Advanced: A key strategy to win is by making two simultaneous threats for the opponent. Usually this involves connecting three discs to " +
                     "prevent the opponent from having an advantage in that column. Also, remember that discs placed in the middle are more valuable then those place " +
                     "on the sides because players have more chances of creating four in a row with them.");
 
             alert.setContentText(content);
             alert.getDialogPane().setMinWidth(650);
             alert.getDialogPane().setMinHeight(700);
-            Image im = new Image("/images/3m2.jpg", false);
-            Circle dp = new Circle(60);
+            Image im = new Image("/images/connect4.png", false);
+            Circle dp = new Circle(50);
             dp.setFill(new ImagePattern(im));
             alert.setGraphic(dp);
             alert.show();
@@ -538,6 +541,7 @@ public class Main extends Application {
         chooseColor = new Button("Choose Color");
         chooseColor.setFont(new Font(22));
         chooseColor.setStyle("-fx-background-color: #777d80");
+        //chooseColor.setStyle("-fx-text-fill:White");
         chooseColor.setMinWidth(2*tile_size);
         chooseColor.setLayoutY((rows+1)*tile_size / 2 + 276);
 
