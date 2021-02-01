@@ -257,7 +257,7 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
-            Circle turn = new Circle(tile_size / 4,aiColor);
+            Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -274,7 +274,7 @@ public class Main extends Application {
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
 
-            Circle turn = new Circle(tile_size / 4,humanColor);
+            Circle turn = new Circle(tile_size / 4,aiColor);
             alert.setGraphic(turn);
 
             Optional<ButtonType> result = alert.showAndWait();

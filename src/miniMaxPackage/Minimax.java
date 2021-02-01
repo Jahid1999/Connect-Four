@@ -8,7 +8,7 @@ public class Minimax
 {
     private int [][] board = new int[6][7];
 
-    int highestDepth = 7;
+    int highestDepth = 5;
 
     public Minimax(int[][] board) {
         for(int i=0; i<6; i++)
