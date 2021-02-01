@@ -81,7 +81,7 @@ public class Main extends Application {
 
         Lighting lighting = new Lighting();
         lighting.setLight(light);
-        lighting.setSurfaceScale(5.0);
+        lighting.setSurfaceScale(1.5);
 
         board.setFill(Color.LIGHTBLUE);
         board.setEffect(lighting);
@@ -305,6 +305,15 @@ public class Main extends Application {
             board[5-row][column] = human;
         }
 
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(45.0);
+        light.setElevation(30.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+        disc.setEffect(lighting);
+
         discRoot.getChildren().add(disc);
         disc.setTranslateX(column * (tile_size + 5) + tile_size / 4);
 
@@ -425,6 +434,15 @@ public class Main extends Application {
     {
         grid[3][5] = disc;
         board[0][3] = ai;
+
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(90.0);
+        light.setElevation(35.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+        disc.setEffect(lighting);
 
         discRoot.getChildren().add(disc);
         disc.setTranslateX(3 * (tile_size + 5) + tile_size / 4);
@@ -604,7 +622,7 @@ public class Main extends Application {
                 "2. AI First: AI will make the first move if you click the START button.\n");
         alert.setContentText(content);
         alert.getDialogPane().setMinWidth(550);
-        alert.getDialogPane().setMinHeight(200);
+        alert.getDialogPane().setMinHeight(250);
         Image im = new Image("/images/connect4.png", false);
         Circle dp = new Circle(30);
         dp.setFill(new ImagePattern(im));
