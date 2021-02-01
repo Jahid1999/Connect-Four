@@ -520,7 +520,6 @@ public class Main extends Application {
             }
         };
 
-        // set listener
         cp.setOnAction(event);
 
         left.getChildren().add(vbox);
@@ -544,6 +543,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Connect Four");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
