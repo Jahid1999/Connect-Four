@@ -326,6 +326,7 @@ public class Main extends Application {
         st.play();
 
         checkWin();
+        checkDraw();
 
         if(!isGameEnded)
         {
@@ -361,6 +362,41 @@ public class Main extends Application {
             board[rowAI][col] = ai;
 
             checkWin();
+            checkDraw();
+        }
+    }
+
+    private void checkDraw()
+    {
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<columns; j++)
+            {
+                if (board[i][j]==0)
+                {
+                    return;
+                }
+            }
+        }
+
+        showDrawAlert();
+    }
+
+    private void showDrawAlert()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("It's a draw! GGWP!");
+        alert.setTitle("Connect Four");
+        Image im = new Image("/images/connect4.png", false);
+        Circle dp = new Circle(30);
+        dp.setFill(new ImagePattern(im));
+        alert.setGraphic(dp);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
+        {
+            System.exit(0);
         }
     }
 
@@ -616,6 +652,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         startGame(primaryStage);
+
         initialAlert();
     }
 
