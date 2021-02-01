@@ -222,7 +222,18 @@ public class Main extends Application {
         line.setEndX(eX);
         line.setStartY(sY);
         line.setEndY(eY);
+
+        line.setStroke(Color.RED);
+        line.setStyle("-fx-stroke-width: 3");
         right.getChildren().add(line);
+//        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), line);
+//        animation.setFromX(sX);
+//        animation.setToX(eX);
+//        animation.setFromY(sY);
+//        animation.setToY(eY);
+//
+//        animation.play();
+
 
     }
 
