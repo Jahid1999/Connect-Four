@@ -258,6 +258,16 @@ public class Main extends Application {
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
             Circle turn = new Circle(tile_size / 4,humanColor);
+
+            Light.Distant light = new Light.Distant();
+            light.setAzimuth(45.0);
+            light.setElevation(30.0);
+
+            Lighting lighting = new Lighting();
+            lighting.setLight(light);
+            lighting.setSurfaceScale(5.0);
+            turn.setEffect(lighting);
+
             alert.setGraphic(turn);
             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
 
@@ -276,6 +286,16 @@ public class Main extends Application {
             alert.setTitle("Connect Four");
 
             Circle turn = new Circle(tile_size / 4,aiColor);
+
+            Light.Distant light = new Light.Distant();
+            light.setAzimuth(45.0);
+            light.setElevation(30.0);
+
+            Lighting lighting = new Lighting();
+            lighting.setLight(light);
+            lighting.setSurfaceScale(5.0);
+            turn.setEffect(lighting);
+
             alert.setGraphic(turn);
             ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
 
@@ -340,6 +360,9 @@ public class Main extends Application {
         if(!isGameEnded)
         {
             Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, aiColor);
+
+            turn.setEffect(lighting);
+
             FadeTransition t = new FadeTransition(Duration.seconds(4), turn);
             t.setFromValue(10);
             t.setToValue(0);
@@ -421,16 +444,26 @@ public class Main extends Application {
         winner.setMinWidth(2*tile_size);
         winner.setLayoutY(((rows-2)*tile_size / 2)-10);
 
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(45.0);
+        light.setElevation(30.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+
         Circle turn = null;
         Button turnText = null;
         if (player==human)
         {
             turn = new Circle(tile_size / 2, humanColor);
+            turn.setEffect(lighting);
             turnText = new Button("You");
         }
         else if (player==ai)
         {
             turn = new Circle(tile_size / 2, aiColor);
+            turn.setEffect(lighting);
             turnText = new Button("AI");
         }
 
@@ -495,6 +528,16 @@ public class Main extends Application {
 
         left.setPrefSize(2*tile_size, columns* tile_size);
         Circle turn = new Circle(tile_size / 2, redMove ? humanColor : aiColor);
+
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(45.0);
+        light.setElevation(35.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+
+        turn.setEffect(lighting);
         turn.setCenterX(tile_size);
         turn.setCenterY(rows*tile_size / 2);
 
