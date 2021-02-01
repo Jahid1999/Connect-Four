@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -40,6 +41,7 @@ public class Main extends Application {
     private static final int rows = 6;
     int human =1;
     int ai =5;
+    int sX , eX, sY, eY;
 
     private boolean redMove = true;
     private boolean isGameEnded = false;
@@ -48,6 +50,7 @@ public class Main extends Application {
 
     private Pane discRoot = new Pane();
     Pane left = new Pane();
+    Pane right = new Pane();
 
     static Color humanColor = Color.DARKSLATEGREY;
     static Color aiColor = Color.DARKCYAN;
@@ -121,6 +124,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player&&board[i+3][j+3]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j+3;
+                    eY=i+3;
                     return true;
                 }
             }
@@ -132,6 +139,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player&&board[i-3][j+3]==player)
                 {
+                    sX=j+3;
+                    sY=i-3;
+                    eX=j;
+                    eY=i;
                     return true;
                 }
             }
@@ -143,6 +154,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player&&board[i][j+3]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j+3;
+                    eY=i;
                     return true;
                 }
             }
@@ -154,6 +169,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player&&board[i+3][j]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j;
+                    eY=i+3;
                     return true;
                 }
             }
@@ -191,11 +210,39 @@ public class Main extends Application {
         return false;
     }*/
 
+    public void drawLine()
+    {
+        sX= sX*(tile_size + 5)+(3*tile_size)/4;
+        eX= eX*(tile_size + 5)+(3*tile_size)/4;
+        sY= (rows-sY)*(tile_size + 5)-tile_size/4;
+        eY= (rows-eY)*(tile_size + 5)-tile_size/4;
+
+        Line line = new Line();
+        line.setStartX(sX);
+        line.setEndX(eX);
+        line.setStartY(sY);
+        line.setEndY(eY);
+
+        line.setStroke(Color.RED);
+        line.setStyle("-fx-stroke-width: 3");
+        right.getChildren().add(line);
+//        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), line);
+//        animation.setFromX(sX);
+//        animation.setToX(eX);
+//        animation.setFromY(sY);
+//        animation.setToY(eY);
+//
+//        animation.play();
+
+
+    }
+
     public void checkWin ()
     {
         if(winning(board, human))
         {
             gameOver(human);
+            drawLine();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
@@ -211,6 +258,7 @@ public class Main extends Application {
         if(winning(board, ai))
         {
             gameOver(ai);
+            drawLine();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
@@ -469,7 +517,7 @@ public class Main extends Application {
 
         left.setStyle("-fx-background-color: #b4bcc1");
 
-        Pane right = new Pane();
+
         right.getChildren().add(discRoot);
 
         Shape gridShape = makeGrid();
