@@ -592,8 +592,20 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         startGame(primaryStage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("How To Start The Game");
+        alert.setTitle("Connect Four");
+        String content = String.format("1. Human First: You can make the first move by clicking your desired column within the board.\n\n" +
+                "2. AI First: AI will make the first move if you click the START button.\n");
+        alert.setContentText(content);
+        alert.getDialogPane().setMinWidth(550);
+        alert.getDialogPane().setMinHeight(200);
+        Image im = new Image("/images/connect4.png", false);
+        Circle dp = new Circle(30);
+        dp.setFill(new ImagePattern(im));
+        alert.setGraphic(dp);
+        alert.show();
     }
 
     public static void main(String[] args) {
