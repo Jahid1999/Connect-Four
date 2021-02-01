@@ -259,6 +259,7 @@ public class Main extends Application {
             alert.setTitle("Connect Four");
             Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
 
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
@@ -276,6 +277,7 @@ public class Main extends Application {
 
             Circle turn = new Circle(tile_size / 4,aiColor);
             alert.setGraphic(turn);
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
 
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
@@ -462,6 +464,7 @@ public class Main extends Application {
             Circle dp = new Circle(60);
             dp.setFill(new ImagePattern(im));
             alert.setGraphic(dp);
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
             alert.show();
         });
         Button help = new Button("Help");
@@ -500,6 +503,7 @@ public class Main extends Application {
             Circle dp = new Circle(50);
             dp.setFill(new ImagePattern(im));
             alert.setGraphic(dp);
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
             alert.show();
         });
 
@@ -591,10 +595,28 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    public void initialAlert ()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("How To Start The Game");
+        alert.setTitle("Connect Four");
+        String content = String.format("1. Human First: You can make the first move by clicking your desired column within the board.\n\n" +
+                "2. AI First: AI will make the first move if you click the START button.\n");
+        alert.setContentText(content);
+        alert.getDialogPane().setMinWidth(550);
+        alert.getDialogPane().setMinHeight(200);
+        Image im = new Image("/images/connect4.png", false);
+        Circle dp = new Circle(30);
+        dp.setFill(new ImagePattern(im));
+        alert.setGraphic(dp);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
+        alert.show();
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         startGame(primaryStage);
+        initialAlert();
     }
 
     public static void main(String[] args) {
