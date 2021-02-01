@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import miniMaxPackage.Minimax;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -39,7 +40,8 @@ public class Main extends Application {
     private static final int columns = 7;
     private static final int rows = 6;
     int human =1;
-    int ai =5;//2;
+    int ai =5;
+    int sX , eX, sY, eY;
 
     private boolean redMove = true;
     private boolean isGameEnded = false;
@@ -48,6 +50,7 @@ public class Main extends Application {
 
     private Pane discRoot = new Pane();
     Pane left = new Pane();
+    Pane right = new Pane();
 
     static Color humanColor = Color.DARKSLATEGREY;
     static Color aiColor = Color.DARKCYAN;
@@ -121,6 +124,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player&&board[i+3][j+3]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j+3;
+                    eY=i+3;
                     return true;
                 }
             }
@@ -132,6 +139,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player&&board[i-3][j+3]==player)
                 {
+                    sX=j+3;
+                    sY=i-3;
+                    eX=j;
+                    eY=i;
                     return true;
                 }
             }
@@ -143,6 +154,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player&&board[i][j+3]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j+3;
+                    eY=i;
                     return true;
                 }
             }
@@ -154,6 +169,10 @@ public class Main extends Application {
             {
                 if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player&&board[i+3][j]==player)
                 {
+                    sX=j;
+                    sY=i;
+                    eX=j;
+                    eY=i+3;
                     return true;
                 }
             }
@@ -178,7 +197,7 @@ public class Main extends Application {
         return row;
     }
 
-    public boolean isValidCol (int col)
+    /*public boolean isValidCol (int col)
     {
         for (int i=0; i<rows; i++)
         {
@@ -189,6 +208,22 @@ public class Main extends Application {
         }
 
         return false;
+    }*/
+
+    public void drawLine()
+    {
+        sX= sX*(tile_size + 5)+(3*tile_size)/4;
+        eX= eX*(tile_size + 5)+(3*tile_size)/4;
+        sY= (rows-sY)*(tile_size + 5)-tile_size/4;
+        eY= (rows-eY)*(tile_size + 5)-tile_size/4;
+
+        Line line = new Line();
+        line.setStartX(sX);
+        line.setEndX(eX);
+        line.setStartY(sY);
+        line.setEndY(eY);
+        right.getChildren().add(line);
+
     }
 
     public void checkWin ()
@@ -196,6 +231,7 @@ public class Main extends Application {
         if(winning(board, human))
         {
             gameOver(human);
+            drawLine();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
@@ -211,11 +247,10 @@ public class Main extends Application {
         if(winning(board, ai))
         {
             gameOver(ai);
+            drawLine();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
-//            Image im = new Image("/images/3m1.jpg", false);
-//            Circle turn = new Circle(tile_size / 4);
 
             Circle turn = new Circle(tile_size / 4,humanColor);
             alert.setGraphic(turn);
@@ -239,7 +274,6 @@ public class Main extends Application {
         {
             grid[column][row] = disc;
             board[5-row][column] = human;
-            //System.out.println("-------------" + row);
         }
 
         discRoot.getChildren().add(disc);
@@ -262,8 +296,6 @@ public class Main extends Application {
             a2 =animation;
         }
 
-        //animation.play();
-
         SequentialTransition st = new SequentialTransition(disc, a1, new PauseTransition(Duration.seconds(1)), a2);
 
         st.play();
@@ -273,7 +305,7 @@ public class Main extends Application {
         if(!isGameEnded)
         {
             Circle turn = new Circle(tile_size, rows*tile_size / 2,tile_size/2, aiColor);
-            FadeTransition t = new FadeTransition(Duration.seconds(5), turn);
+            FadeTransition t = new FadeTransition(Duration.seconds(4), turn);
             t.setFromValue(10);
             t.setToValue(0);
             t.play();
@@ -284,29 +316,21 @@ public class Main extends Application {
             turnText.setStyle("-fx-background-color: #777d80");
             turnText.setMinWidth(2*tile_size);
             turnText.setLayoutY((rows+1)*tile_size / 2 + 10);
-            FadeTransition fade = new FadeTransition(Duration.seconds(5), turnText);
+            FadeTransition fade = new FadeTransition(Duration.seconds(4), turnText);
             fade.setFromValue(10);
             fade.setToValue(0);
             fade.play();
             left.getChildren().add(turnText);
-
-            //Circle turn = new Circle(tile_size / 2, redMove ? Color.RED : Color.YELLOW);
-            //Button turnText = new Button(redMove? "AI's Turn" : "Your Turn");
         }
         redMove = !redMove;
         if(!redMove)
         {
-
             Minimax minimax = new Minimax(board);
             int col = minimax.getMove();
 
             int rowAI = minimax.calculateRow(board, col);
             int rowUI = calUIRow(col);
-            /*System.out.println("row---" + rowAI);
-            System.out.println("col---" + col);*/
             placeDisc(new Disc(redMove), col);
-
-            //System.out.println("col----" + col);
 
             grid[col][rowUI] = disc;
             board[rowAI][col] = ai;
@@ -314,27 +338,6 @@ public class Main extends Application {
             checkWin();
         }
     }
-
-//    private boolean checkRange(List<Point2D> points) {
-//        int chain = 0;
-//
-//        for (Point2D p : points) {
-//            int column = (int) p.getX();
-//            int row = (int) p.getY();
-//
-//            Disc disc = getDisc(column, row).orElse(new Disc(!redMove));
-//            if (disc.red == redMove) {
-//                chain++;
-//                if (chain == 4) {
-//                    return true;
-//                }
-//            } else {
-//                chain = 0;
-//            }
-//        }
-//
-//        return false;
-//    }
 
     private void gameOver(int player) {
         isGameEnded = true;
@@ -372,15 +375,6 @@ public class Main extends Application {
         left.getChildren().add(winner);
         left.getChildren().add(turn);
         left.getChildren().add(turnText);
-
-//        for(int i=0; i<6; i++)
-//        {
-//            for(int j=0; j<7; j++)
-//            {
-//                System.out.print(board[i][j]+"-------");
-//            }
-//            System.out.println();
-//        }
     }
 
     private Optional<Disc> getDisc(int column, int row) {
@@ -512,7 +506,7 @@ public class Main extends Application {
 
         left.setStyle("-fx-background-color: #b4bcc1");
 
-        Pane right = new Pane();
+
         right.getChildren().add(discRoot);
 
         Shape gridShape = makeGrid();

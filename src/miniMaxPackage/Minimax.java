@@ -19,16 +19,7 @@ public class Minimax
             }
         }
 
-        /*List<Integer> validCols = new ArrayList<>();
-
-        calculateValidCols(board, validCols);
-        Random rand = new Random();
-        int randInt = rand.nextInt(validCols.size());
-        move = validCols.get(randInt);
-
-        System.out.println(move);*/
-
-        /*int tempMove = connect3(board, ai);
+        int tempMove = connect3(board, ai);
         if (tempMove!=-1)
         {
             move = tempMove;
@@ -37,31 +28,23 @@ public class Minimax
         {
             tempMove = connect3(board, human);
             if (tempMove==-1)
-            {*/
+            {
                 minimax(this.board, -Integer.MAX_VALUE, Integer.MAX_VALUE, 1, highestDepth);
-            /*}
+            }
             else
             {
                 move = tempMove;
             }
-        }*/
-        /*for(int i=0; i<6; i++)
-        {
-            for(int j=0; j<7; j++)
-            {
-                System.out.print(board[i][j]+"-------");
-            }
-            System.out.println();
-        }*/
+        }
     }
 
     private int rows = 6;
     private int columns = 7;
 
     private int human = 1;
-    private int ai = 5;//2;
+    private int ai = 5;
 
-    private int move=-1;
+    private int move=0;
 
     public int getMove() {
         return move;
@@ -80,33 +63,6 @@ public class Minimax
                 }
             }
         }
-
-        /*for(int i=0; i<columns; i++)
-        {
-            for (int j=0; j<rows; j++)
-            {
-                if (board[j][i]==human)
-                {
-                    if (i==0)
-                    {
-                        if (!validCols.contains(i))
-                            validCols.add(i);
-                        if (!validCols.contains(i+1))
-                            validCols.add(i+1);
-                    }
-
-                    if (i==6)
-                    {
-                        if (!validCols.contains(i))
-                            validCols.add(i);
-                        if (!validCols.contains(i-1))
-                            validCols.add(i-1);
-                    }
-                    validCols.add(i);
-                    break;
-                }
-            }
-        }*/
     }
 
     public int calculateRow (int [][] board, int col)
@@ -126,22 +82,16 @@ public class Minimax
     {
         if (win(board, ai))
         {
-            //System.out.println("ayeeeeee");
-            //System.out.println("jitse");
-            return 500*depth;
+            return 2000*(depth+1);
         }
 
         if (win(board,human))
         {
-            //System.out.println("jite gelo. theka beta");
-            //System.out.println("jitse");
-            return -500*depth;
+            return -2000*(depth+1);
         }
 
         if (depth==0)
         {
-            //System.out.println("ami bolod");
-            //System.out.println("ami asi");
             EvaluationFunction eval = new EvaluationFunction();
             return eval.getValue(board, ai);
         }
@@ -150,16 +100,11 @@ public class Minimax
 
         calculateValidCols(board, validCols);
 
-        //System.out.println("---"+validCols+"---");
-
         if (turn == 1)
         {
-            //System.out.println(validCols.size());
-            List<Integer> list = new ArrayList<>();
             for(int col: validCols)
             {
-
-                int [][] tempBoard = new int [6][7]; // = board.clone();
+                int [][] tempBoard = new int [6][7];
 
                 for(int i=0; i<6; i++)
                 {
@@ -171,65 +116,32 @@ public class Minimax
 
                 int row = calculateRow(tempBoard, col);
 
-                //System.out.println("===========" + row + "=======" + col);
-
-
-
                 tempBoard[row][col] = ai;
-
-
 
                 int value = minimax(tempBoard, a, b, 0, depth-1);
 
-
-                list.add(value);
-
-
                 if (value>a)
                 {
-                    //System.out.println(value);
                     a = value;
 
                     if (depth==highestDepth)
                     {
                         move = col;
                     }
-
-                    //System.out.println("+++++" + a + "+++++" + move);
                 }
-
-                if (depth==5)
-                {
-                    /*System.out.println(col);
-                    System.out.println(value);
-                    System.out.println(move);
-                    System.out.println("****");*/
-                }
-
-
-
-                //System.out.println("++" + a + "++" + move);
 
                 if (a>=b)
                 {
                     break;
                 }
-
-                /*for (int kute: list)
-                {
-                    System.out.print("**" + kute);
-                }*/
-                //System.out.println("****************************");
             }
-//            System.out.println(list);
-//            System.out.println(validCols);
             return a;
         }
         else
         {
             for(int col: validCols)
             {
-                int [][] tempBoard = new int [6][7]; // = board.clone();
+                int [][] tempBoard = new int [6][7];
 
                 for(int i=0; i<6; i++)
                 {
@@ -255,6 +167,7 @@ public class Minimax
                     break;
                 }
             }
+
             return b;
         }
     }
@@ -384,129 +297,4 @@ public class Minimax
 
         return -1;
     }
-
-    /*public int connect3 (int [][] board, int player)
-    {
-        for(int i=0; i<3; i++)
-        {
-            for(int j=0; j<4; j++)
-            {
-                if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player)
-                {
-                    if (board[i+3][j+3]==0)
-                    {
-                        if ((i+3-calculateRow(board, j+3))==0)
-                            return j+3;
-                    }
-                }
-            }
-        }
-
-        for(int i=1; i<4; i++)
-        {
-            for(int j=1; j<5; j++)
-            {
-                if(board[i][j]==player&&board[i+1][j+1]==player&&board[i+2][j+2]==player)
-                {
-                    if (board[i-1][j-1]==0)
-                    {
-                        if ((i-1-calculateRow(board, j-1))==0)
-                            return j-1;
-                    }
-                }
-            }
-        }
-
-        for(int i=3; i<6; i++)
-        {
-            for(int j=0; j<4; j++)
-            {
-                if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player)
-                {
-                    if (board[i-3][j+3]==0)
-                    {
-                        if ((i-3-calculateRow(board, j+3))==0)
-                            return j+3;
-                    }
-                }
-            }
-        }
-
-        for(int i=2; i<5; i++)
-        {
-            for(int j=1; j<5; j++)
-            {
-                if(board[i][j]==player&&board[i-1][j+1]==player&&board[i-2][j+2]==player)
-                {
-                    if (board[i+1][j-1]==0)
-                    {
-                        if ((i+1-calculateRow(board, j-1))==0)
-                            return j-1;
-                    }
-                }
-            }
-        }
-
-        for(int i=0; i<6; i++)
-        {
-            for(int j=0; j<4; j++)
-            {
-                if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player)
-                {
-                    if (board[i][j+3]==0)
-                    {
-                        if ((i-calculateRow(board, j+3))==0)
-                            return j+3;
-                    }
-                }
-            }
-        }
-
-        for(int i=0; i<6; i++)
-        {
-            for(int j=1; j<5; j++)
-            {
-                if(board[i][j]==player&&board[i][j+1]==player&&board[i][j+2]==player)
-                {
-                    if (board[i][j-1]==0)
-                    {
-                        if ((i-calculateRow(board, j-1))==0)
-                            return j-1;
-                    }
-                }
-            }
-        }
-
-        for(int i=0; i<3; i++)
-        {
-            for(int j=0; j<7; j++)
-            {
-                if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player)
-                {
-                    if (board[i+3][j]==0)
-                    {
-                        if ((i+3-calculateRow(board, j))==0)
-                            return j;
-                    }
-                }
-            }
-        }
-
-        for(int i=1; i<4; i++)
-        {
-            for(int j=0; j<7; j++)
-            {
-                if(board[i][j]==player&&board[i+1][j]==player&&board[i+2][j]==player)
-                {
-                    if (board[i-1][j]==0)
-                    {
-                        if ((i-1-calculateRow(board, j))==0)
-                            return j;
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }*/
 }
