@@ -2,6 +2,7 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -210,31 +211,39 @@ public class Main extends Application {
         return false;
     }*/
 
-    public void drawLine()
+    public void drawLine(int player)
     {
         sX= sX*(tile_size + 5)+(3*tile_size)/4;
         eX= eX*(tile_size + 5)+(3*tile_size)/4;
         sY= (rows-sY)*(tile_size + 5)-tile_size/4;
         eY= (rows-eY)*(tile_size + 5)-tile_size/4;
 
-        Line line = new Line();
-        line.setStartX(sX);
-        line.setEndX(eX);
-        line.setStartY(sY);
-        line.setEndY(eY);
-
-        line.setStroke(Color.RED);
+        Line line = new Line(sX,sY,eX,eY);
+        line.setFill(Color.WHITE);
+        line.setStroke(Color.WHITE);
         line.setStyle("-fx-stroke-width: 3");
-        right.getChildren().add(line);
-//        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), line);
-//        animation.setFromX(sX);
-//        animation.setToX(eX);
-//        animation.setFromY(sY);
-//        animation.setToY(eY);
-//
-//        animation.play();
+        right.getChildren().addAll(line);
 
+        Circle cir = new Circle(sX, sY,10);
 
+        if (player == human)
+        {
+            cir.setFill(humanColor.invert());
+        }
+        else
+        {
+            cir.setFill(aiColor.invert());
+        }
+
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(1000));
+        pathTransition.setNode(cir);
+        pathTransition.setPath(line);
+        pathTransition.setCycleCount(PathTransition.INDEFINITE);
+        pathTransition.setAutoReverse(true);
+        pathTransition.play();
+
+        right.getChildren().add(cir);
     }
 
     public void checkWin ()
@@ -242,7 +251,7 @@ public class Main extends Application {
         if(winning(board, human))
         {
             gameOver(human);
-            drawLine();
+            drawLine(human);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Congratulations! You have won!");
             alert.setTitle("Connect Four");
@@ -258,7 +267,7 @@ public class Main extends Application {
         if(winning(board, ai))
         {
             gameOver(ai);
-            drawLine();
+            drawLine(ai);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("OOPS! You have lost!");
             alert.setTitle("Connect Four");
@@ -280,6 +289,11 @@ public class Main extends Application {
     private void placeDisc(Disc disc, int column) {
 
         int row = calUIRow(column);
+
+        if (row == -1)
+        {
+            return;
+        }
 
         if(redMove)
         {
@@ -407,8 +421,8 @@ public class Main extends Application {
         }
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void startGame (Stage primaryStage)
+    {
         GridPane root = new GridPane();
 
         left.setPrefSize(2*tile_size, columns* tile_size);
@@ -531,6 +545,12 @@ public class Main extends Application {
         primaryStage.setTitle("Connect Four");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        startGame(primaryStage);
     }
 
     public static void main(String[] args) {
