@@ -310,11 +310,26 @@ public class Main extends Application {
     TranslateTransition a1;
     TranslateTransition a2;
 
+    public int calculateRow (int [][] board, int col)
+    {
+        for(int i=0; i<rows; i++)
+        {
+            if(board[i][col]==0)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     private void placeDisc(Disc disc, int column) {
 
         int row = calUIRow(column);
 
-        if (row == -1)
+        int rowA = calculateRow(board, column);
+
+        if (row == -1 || rowA == -1)
         {
             return;
         }
@@ -322,7 +337,7 @@ public class Main extends Application {
         if(redMove)
         {
             grid[column][row] = disc;
-            board[5-row][column] = human;
+            board[rowA][column] = human;
         }
 
         Light.Distant light = new Light.Distant();
@@ -355,6 +370,7 @@ public class Main extends Application {
         st.play();
 
         checkWin();
+        checkDraw();
 
         if(!isGameEnded)
         {
@@ -385,7 +401,7 @@ public class Main extends Application {
             Minimax minimax = new Minimax(board);
             int col = minimax.getMove();
 
-            int rowAI = minimax.calculateRow(board, col);
+            int rowAI = calculateRow(board, col);
             int rowUI = calUIRow(col);
             placeDisc(new Disc(redMove), col);
 
@@ -393,6 +409,41 @@ public class Main extends Application {
             board[rowAI][col] = ai;
 
             checkWin();
+            checkDraw();
+        }
+    }
+
+    private void checkDraw()
+    {
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<columns; j++)
+            {
+                if (board[i][j]==0)
+                {
+                    return;
+                }
+            }
+        }
+
+        showDrawAlert();
+    }
+
+    private void showDrawAlert()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("It's a draw! GGWP!");
+        alert.setTitle("Connect Four");
+        Image im = new Image("/images/connect4.png", false);
+        Circle dp = new Circle(30);
+        dp.setFill(new ImagePattern(im));
+        alert.setGraphic(dp);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("/images/connect4.png"));
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(!result.isPresent()||result.get() == ButtonType.OK||result.get() == ButtonType.CANCEL)
+        {
+            System.exit(0);
         }
     }
 
@@ -676,7 +727,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         startGame(primaryStage);
+
         initialAlert();
     }
 
