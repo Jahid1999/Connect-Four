@@ -310,11 +310,26 @@ public class Main extends Application {
     TranslateTransition a1;
     TranslateTransition a2;
 
+    public int calculateRow (int [][] board, int col)
+    {
+        for(int i=0; i<rows; i++)
+        {
+            if(board[i][col]==0)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     private void placeDisc(Disc disc, int column) {
 
         int row = calUIRow(column);
 
-        if (row == -1)
+        int rowA = calculateRow(board, column);
+
+        if (row == -1 || rowA == -1)
         {
             return;
         }
@@ -322,7 +337,7 @@ public class Main extends Application {
         if(redMove)
         {
             grid[column][row] = disc;
-            board[5-row][column] = human;
+            board[rowA][column] = human;
         }
 
         Light.Distant light = new Light.Distant();
@@ -386,7 +401,7 @@ public class Main extends Application {
             Minimax minimax = new Minimax(board);
             int col = minimax.getMove();
 
-            int rowAI = minimax.calculateRow(board, col);
+            int rowAI = calculateRow(board, col);
             int rowUI = calUIRow(col);
             placeDisc(new Disc(redMove), col);
 
@@ -712,6 +727,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         startGame(primaryStage);
 
         initialAlert();

@@ -90,6 +90,11 @@ public class Minimax
             return -2000*(depth+1);
         }
 
+        if (checkDraw(board))
+        {
+            return 0;
+        }
+
         if (depth==0)
         {
             EvaluationFunction eval = new EvaluationFunction();
@@ -170,6 +175,22 @@ public class Minimax
 
             return b;
         }
+    }
+
+    private boolean checkDraw(int [][] board)
+    {
+        for (int i=0; i<rows; i++)
+        {
+            for (int j=0; j<columns; j++)
+            {
+                if (board[i][j]==0)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public boolean win (int [][] board, int player)
